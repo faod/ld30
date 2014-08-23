@@ -4,7 +4,7 @@
 
 Game::Game() : m(800, 600), w(b2Vec2(0.0f, 10.0f)), player(NULL)
 {
-	player = new Player(*this, b2Vec2(10., 10.));
+	player = new Player(*this, b2Vec2(1., 1.));
 	characters.push_back(player);
 	characters.push_back(new Monster(*this, b2Vec2(80., 10.)));
 	characters.push_back(new Monster(*this, b2Vec2(140., 10.)));
