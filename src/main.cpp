@@ -9,6 +9,7 @@
 
 #include "main.hpp"
 #include "failure.hpp"
+#include "Game.hpp"
 
 using std::cerr;
 
@@ -92,16 +93,29 @@ Main::~Main() {
 /** OpenGL 3.3+ modern **/
 int main(int argc, char *argv[]) {
 	try {
-		Main m(800, 600);
-		ALLEGRO_EVENT ev;
-		int step = 0;
-		al_start_timer(m.animationTimer);
-		
-		bool loop = true;
-		while (al_wait_for_event(m.animationEQ, &ev), loop) {
-			al_clear_to_color(al_map_rgb(0., 0., 0.));
-			al_flip_display();
+		Game g;
+	
+		ALLEGRO_THREAD* anim = al_create_thread(Game::startAnim, &g);
+		if(anim)
+			al_start_thread(anim);
+		else
+		{
+			throw Failure("failure to create animation thread");
 		}
+	
+		ALLEGRO_THREAD* input = al_create_thread(Game::startInput, &g);
+		if(input)
+			al_start_thread(input);
+		else
+		{
+			al_destroy_thread(anim);
+			throw Failure("failure to create input thread");
+		}
+
+		Game::startRefresh(&g);
+
+		al_destroy_thread(anim);
+		al_destroy_thread(input);
 	}
 	catch (Failure f) {
 		cerr << f.what();
