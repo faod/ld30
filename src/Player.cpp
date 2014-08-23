@@ -44,17 +44,19 @@ void Player::tick()
 	body->ApplyLinearImpulse(b2Vec2(body->GetMass() * (needvel - body->GetLinearVelocity().x), 0.), body->GetWorldCenter(), true);
 }
 
+
+
 void Player::draw() const
 {
 	al_draw_bitmap(bm, al_get_display_width(g.m.display)/2 -al_get_bitmap_width(bm) / 2 , al_get_display_height(g.m.display)/2 - al_get_bitmap_height(bm)/2 , 0);
 	
 	//hp bar
-	al_draw_rectangle(al_get_display_width(g.m.display) / 2 - 100,
-					  al_get_display_height(g.m.display) - 60,
-					  al_get_display_width(g.m.display) / 2 + 100,
-					  al_get_display_height(g.m.display) - 40,
+	al_draw_rectangle(al_get_display_width(g.m.display) / 2 - 102,
+					  al_get_display_height(g.m.display) - 62,
+					  al_get_display_width(g.m.display) / 2 + 102,
+					  al_get_display_height(g.m.display) - 38,
 					  al_map_rgb(80, 0, 0),
-					  3);
+					  4);
 	al_draw_filled_rectangle(al_get_display_width(g.m.display) / 2 - 100,
 							 al_get_display_height(g.m.display) - 60,
 							 al_get_display_width(g.m.display) / 2 - 100 + life * 2,

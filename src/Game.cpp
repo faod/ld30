@@ -95,7 +95,7 @@ void Game::refresh()
 		al_wait_for_event(m.refreshEQ, &ev);
 		map.draw(0, 0, m.screen_w, m.screen_h);
 
-		for(std::vector<Character*>::const_iterator it = characters.begin(), end = characters.end() ; it != end; ++it)
+		for(std::vector<Character*>::const_reverse_iterator it = characters.rbegin(), end = characters.rend() ; it != end; ++it)
 		{
 			(*it)->draw();
 		}
