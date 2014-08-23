@@ -13,6 +13,9 @@
 
 #include "main.hpp"
 #include "Character.hpp"
+#include "Player.hpp"
+
+#include <Box2D/Box2D.h>
 
 #include <vector>
 #include <memory>
@@ -29,14 +32,15 @@ class Game
 	static void *startRefresh(void *arg);
 
 	Main m;
-	
+	b2World w;
+
 	private:
 	void anim(ALLEGRO_THREAD*);
 	void input(ALLEGRO_THREAD*);
 	void refresh();
 
-	std::vector<Character*> characters;
-
+	std::vector<Character*> characters; //all the characters list
+	Player* player;						//quick reference to the special character player
 };
 
 #endif
