@@ -1,7 +1,14 @@
 #include "Game.hpp"
+#include "Player.hpp"
 
 Game::Game() : m(800, 600)
 {
+	characters.push_back(new Player(*this, b2Vec2(10., 10.)));
+}
+Game::~Game()
+{
+	for(std::vector<Character*>::iterator it = characters.begin(), end = characters.end() ; it != end ; ++it)
+		delete *it;
 }
 
 void* Game::startAnim(ALLEGRO_THREAD* t, void* arg)
@@ -61,7 +68,13 @@ void Game::refresh()
  	while (m.loop)
 	{
 		al_wait_for_event(m.refreshEQ, &ev);
+		al_clear_to_color(al_map_rgb(255, 255, 255));	
 
-		//process
+		for(std::vector<Character*>::const_iterator it = characters.begin(), end = characters.end() ; it != end; ++it)
+		{
+			(*it)->draw();
+		}
+
+		al_flip_display();
 	}
 }

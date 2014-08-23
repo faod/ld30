@@ -12,12 +12,17 @@
 
 
 #include "main.hpp"
+#include "Character.hpp"
+
+#include <vector>
+#include <memory>
 
 class Game
 {
 	public:
 	
 	Game();
+	~Game();
 
 	static void *startAnim(ALLEGRO_THREAD* t, void *arg);
 	static void *startInput(ALLEGRO_THREAD* t, void *arg);
@@ -29,6 +34,9 @@ class Game
 	void anim(ALLEGRO_THREAD*);
 	void input(ALLEGRO_THREAD*);
 	void refresh();
+
+	std::vector<Character*> characters;
+
 };
 
 #endif
