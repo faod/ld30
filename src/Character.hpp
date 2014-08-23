@@ -16,6 +16,9 @@ class Character
 	virtual void moveLeft() {}
 	virtual void moveRight() {}
 	virtual void jump() {}
+	virtual void stopLeft() {}
+	virtual void stopRight() {}
+
 
 	virtual ~Character() {}
 

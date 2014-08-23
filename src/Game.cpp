@@ -4,7 +4,7 @@
 
 Game::Game() : m(800, 600), w(b2Vec2(0.0f, 0.0f)), player(NULL)
 {
-	player = new Player(*this, b2Vec2(1., 1.));
+	player = new Player(*this, b2Vec2(1., 4.5));
 	characters.push_back(player);
 	characters.push_back(new Monster(*this, b2Vec2(2., 2.)));
 	characters.push_back(new Monster(*this, b2Vec2(3., 1.)));
@@ -69,8 +69,18 @@ void Game::input(ALLEGRO_THREAD* t)
 					case ALLEGRO_KEY_LEFT: { this->player->moveLeft(); break;}
 					case ALLEGRO_KEY_RIGHT: { this->player->moveRight(); break; }
 					case ALLEGRO_KEY_UP: { this->player->jump(); break; }
+					default : break;
 				}
 			}
+			else if (ev.type == ALLEGRO_EVENT_KEY_UP)
+			{
+				switch(ev.keyboard.keycode)
+				{
+					case ALLEGRO_KEY_LEFT: { this->player->stopLeft(); break; }
+					case ALLEGRO_KEY_RIGHT: { this->player->stopRight(); break; }
+				}	
+			}
+
 		}
 	}
 }

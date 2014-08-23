@@ -29,10 +29,15 @@ Player::~Player()
 
 void Player::tick()
 {
+	float needvel;
 	if(right)
-		body->ApplyForceToCenter(b2Vec2(25.0, 0.), true);
+		needvel = 10.;
 	else if(left)
-		body->ApplyForceToCenter(b2Vec2(-25.0, 0.), true);
+		needvel = -10.;
+	else
+		needvel = 0.;
+
+	body->ApplyLinearImpulse(b2Vec2(body->GetMass() * (needvel - body->GetLinearVelocity().x), 0.), body->GetWorldCenter(), true);
 }
 
 void Player::draw() const
@@ -42,16 +47,23 @@ void Player::draw() const
 
 void Player::moveLeft()
 {
-	if(!right)
 		left = true;
 }
 
 void Player::moveRight()
 {	
-	if(!left)
 		right = true;
 }
 
 void Player::jump()
 {
+}
+
+void Player::stopLeft()
+{
+	left = false;
+}
+void Player::stopRight()
+{
+	right = false;
 }
