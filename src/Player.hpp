@@ -25,6 +25,9 @@ class Player: public Character
 
 	b2BodyDef	bodyDef;
 	b2Body*		body;
+	b2FixtureDef fixtureDef;
+	b2PolygonShape dynamicBox;
+
 };
 
 #endif

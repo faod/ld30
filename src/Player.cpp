@@ -11,6 +11,14 @@ Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64))
 	bodyDef.position.Set(p.x, p.y);
 
 	body = g.w.CreateBody(&bodyDef);
+
+	dynamicBox.SetAsBox(1.0f, 1.0f);
+	
+	fixtureDef.shape = &dynamicBox;
+	fixtureDef.density = 1.0f;
+	fixtureDef.friction = 0.5f;
+
+	body->CreateFixture(&fixtureDef);
 }
 
 Player::~Player()
