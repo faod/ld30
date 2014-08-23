@@ -61,7 +61,7 @@ Main::Main(int screen_w, int screen_h) {
 	al_register_event_source(inputEQ, al_get_keyboard_event_source());
 
 	// ALLEGRO_EVENT_TIMER frame update
-	//al_register_event_source(frameEQ, al_get_timer_event_source(frameTimer));
+	al_register_event_source(refreshEQ, al_get_timer_event_source(refreshTimer));
 	// ALLEGRO_EVENT_TIMER animation update
 	al_register_event_source(animationEQ, al_get_timer_event_source(animationTimer));
 }

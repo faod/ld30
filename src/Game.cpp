@@ -24,12 +24,44 @@ void* Game::startRefresh(void *arg)
 
 void Game::anim(ALLEGRO_THREAD* t)
 {
+	ALLEGRO_EVENT ev;
+
+	al_start_timer(m.animationTimer);
+
+ 	while (m.loop)
+	{
+		al_wait_for_event(m.animationEQ, &ev);
+
+		//process
+	}
 }
 
 void Game::input(ALLEGRO_THREAD* t)
 {
+	ALLEGRO_EVENT ev;
+ 	while (m.loop)
+	{
+ 		if(al_get_next_event(m.inputEQ, &ev))
+		{
+			if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+ 			{
+				m.loop = false;
+				break;
+			}
+		}
+	}
 }
 
 void Game::refresh()
 {
+	ALLEGRO_EVENT ev;
+
+	al_start_timer(m.refreshTimer);
+
+ 	while (m.loop)
+	{
+		al_wait_for_event(m.refreshEQ, &ev);
+
+		//process
+	}
 }
