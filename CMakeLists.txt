@@ -41,6 +41,7 @@ make_libs_filenames(deps ${ALLEG_VERSION})
 append_deps(deps "${deps}")
 list(APPEND deps "${ZLIB_LIBRARIES}")
 list(APPEND deps "${LIBXML2_LIBRARIES}")
+list(APPEND deps "-lBox2D")
 
 set(CMAKE_CXX_FLAGS "--std=c++11")
 
