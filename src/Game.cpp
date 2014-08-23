@@ -60,6 +60,16 @@ void Game::input(ALLEGRO_THREAD* t)
 				m.loop = false;
 				break;
 			}
+			else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
+			{
+				switch (ev.keyboard.keycode)
+				{
+					case ALLEGRO_KEY_LEFT: { this->player->moveLeft(); break;}
+					case ALLEGRO_KEY_RIGHT: { this->player->moveRight(); break; }
+					case ALLEGRO_KEY_UP: { this->player->jump(); break; }
+				}
+			}
+//			if (ev.type == ALLEGRO_
 		}
 	}
 }

@@ -34,3 +34,18 @@ void Player::draw() const
 {
 	al_draw_bitmap(bm, body->GetPosition().x * Game::pixelpm, body->GetPosition().y * Game::pixelpm, 0);
 }
+
+void Player::moveLeft()
+{
+	std::cout << "Player moved on the left" << std::endl;
+}
+
+void Player::moveRight()
+{
+	std::cout << "Player moved on the right" << std::endl;
+}
+
+void Player::jump()
+{
+	std::cout << "Player jumped Cyto's mommy" << std::endl;
+}

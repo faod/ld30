@@ -34,3 +34,18 @@ void Monster::draw() const
 {
 	al_draw_bitmap(bm, body->GetPosition().x * Game::pixelpm, body->GetPosition().y * Game::pixelpm, 0);
 }
+
+void Monster::moveLeft()
+{
+	std::cout << "Monster moved on the left" << std::endl;
+}
+
+void Monster::moveRight()
+{
+	std::cout << "Monster moved on the right" << std::endl;
+}
+
+void Monster::jump()
+{
+	std::cout << "Monster jumped Cyto's mommy" << std::endl;
+}
