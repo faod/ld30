@@ -10,13 +10,6 @@
 #include "main.hpp"
 #include "failure.hpp"
 
-#include "3D/glw.hpp"
-#include "3D/types.hpp"
-#include "3D/transfo.hpp"
-#include "3D/camera.hpp"
-#include "3D/shaders.hpp"
-#include "3D/geometry.hpp"
-
 using std::cerr;
 
 // Initialize Allegro and its addons
