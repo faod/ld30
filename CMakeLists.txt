@@ -46,7 +46,7 @@ set(CMAKE_CXX_FLAGS "--std=c++11")
 #   Build
 #-----------#
 
-file(GLOB sources "${PROJECT_SOURCE_DIR}/src/*.cpp" "${PROJECT_SOURCE_DIR}/src/*/*.cpp")
+file(GLOB sources "${PROJECT_SOURCE_DIR}/src/*.cpp" "${PROJECT_SOURCE_DIR}/src/*/*.cpp" "${PROJECT_SOURCE_DIR}/src/*.c" "${PROJECT_SOURCE_DIR}/src/*/*.c")
 add_executable(${PROJECT_NAME} ${sources})
 if(ALLEGRO_STATICLINK)
 	set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_DEFINITIONS "ALLEGRO_STATICLINK")
