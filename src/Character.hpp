@@ -2,6 +2,8 @@
 #ifndef DEF_CHARACTER
 #define DEF_CHARACTER
 
+#include <iostream>
+
 class Game;
 
 class Character
@@ -10,6 +12,10 @@ class Character
 	Character(Game& ga) : g(ga) {}
 	virtual void tick() = 0;
 	virtual void draw() const = 0;
+
+	virtual void moveLeft() {}
+	virtual void moveRight() {}
+	virtual void jump() {}
 
 	virtual ~Character() {}
 

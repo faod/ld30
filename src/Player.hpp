@@ -17,6 +17,10 @@ class Player: public Character
 	virtual void tick();
 	virtual void draw() const;
 	
+	virtual void moveLeft();
+	virtual void moveRight();
+	virtual void jump();
+
 	virtual ~Player();
 
 	private:
