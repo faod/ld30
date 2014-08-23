@@ -38,7 +38,7 @@ include_directories(${LIBXML2_INCLUDE_DIR})
 
 include("${PROJECT_SOURCE_DIR}/cmake/alleg.cmake")
 make_libs_filenames(deps ${ALLEG_VERSION})
-append_deps(deps "${deps}")
+append_deps(deps "${deps} ${ZLIB_LIBRARIES} ${LIBXML2_LIBRARIES}")
 
 set(CMAKE_CXX_FLAGS "--std=c++11")
 
