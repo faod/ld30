@@ -31,6 +31,8 @@ class Player: public Character
 	b2FixtureDef fixtureDef;
 	b2PolygonShape dynamicBox;
 
+	bool left;
+	bool right;
 };
 
 #endif

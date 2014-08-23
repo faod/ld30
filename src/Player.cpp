@@ -1,7 +1,7 @@
 #include "Player.hpp"
 #include "Game.hpp"
 
-Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64))
+Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64)), left(false), right(false)
 {
 	al_set_target_bitmap(bm);
 	al_clear_to_color(al_map_rgb(255, 0, 0));
@@ -29,6 +29,10 @@ Player::~Player()
 
 void Player::tick()
 {
+	if(right)
+		body->ApplyForceToCenter(b2Vec2(25.0, 0.), true);
+	else if(left)
+		body->ApplyForceToCenter(b2Vec2(-25.0, 0.), true);
 }
 
 void Player::draw() const
@@ -38,15 +42,16 @@ void Player::draw() const
 
 void Player::moveLeft()
 {
-	std::cout << "Player moved on the left" << std::endl;
+	if(!right)
+		left = true;
 }
 
 void Player::moveRight()
-{
-	std::cout << "Player moved on the right" << std::endl;
+{	
+	if(!left)
+		right = true;
 }
 
 void Player::jump()
 {
-	std::cout << "Player jumped Cyto's mommy" << std::endl;
 }

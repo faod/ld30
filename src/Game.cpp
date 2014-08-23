@@ -2,7 +2,7 @@
 #include "Player.hpp"
 #include "Monster.hpp"
 
-Game::Game() : m(800, 600), w(b2Vec2(0.0f, 10.0f)), player(NULL)
+Game::Game() : m(800, 600), w(b2Vec2(0.0f, 0.0f)), player(NULL)
 {
 	player = new Player(*this, b2Vec2(1., 1.));
 	characters.push_back(player);
@@ -44,7 +44,9 @@ void Game::anim(ALLEGRO_THREAD* t)
 		al_wait_for_event(m.animationEQ, &ev);
 		
 		w.Step(1./m.animation_tick, 6, 2);
-
+		
+		for(std::vector<Character*>::iterator it = characters.begin(), end = characters.end(); it != end; ++it)
+			(*it)->tick();
 	}
 }
 
@@ -69,7 +71,6 @@ void Game::input(ALLEGRO_THREAD* t)
 					case ALLEGRO_KEY_UP: { this->player->jump(); break; }
 				}
 			}
-//			if (ev.type == ALLEGRO_
 		}
 	}
 }
