@@ -76,7 +76,7 @@ Main::~Main() {
 	al_shutdown_image_addon();
 
 	al_destroy_timer(animationTimer);
-	al_destroy_timer(frameTimer);
+	al_destroy_timer(refreshTimer);
 
 	al_destroy_event_queue(inputEQ);
 	al_destroy_event_queue(animationEQ);
