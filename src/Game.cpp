@@ -2,7 +2,7 @@
 #include "Player.hpp"
 #include "Monster.hpp"
 
-Game::Game() : m(1280, 720), w(b2Vec2(0.0f, 0.0f)), player(NULL)
+Game::Game(char *mapPath) : m(1280, 720), w(b2Vec2(0.0f, 0.0f)), player(NULL), map(mapPath)
 {
 	player = new Player(*this, b2Vec2(1., 4.5));
 	characters.push_back(player);
@@ -93,7 +93,7 @@ void Game::refresh()
  	while (m.loop)
 	{
 		al_wait_for_event(m.refreshEQ, &ev);
-		al_clear_to_color(al_map_rgb(0, 0, 0));	
+		map.draw(0, 0, m.screen_w, m.screen_h);
 
 		for(std::vector<Character*>::const_iterator it = characters.begin(), end = characters.end() ; it != end; ++it)
 		{

@@ -12,6 +12,7 @@
 #include "Game.hpp"
 
 using std::cerr;
+using std::endl;
 
 // Initialize Allegro and its addons
 Main::Main(int screen_w, int screen_h): loop(true) {
@@ -92,8 +93,14 @@ Main::~Main() {
 
 /** OpenGL 3.3+ modern **/
 int main(int argc, char *argv[]) {
+	if (argc != 2)
+	{
+		cerr << "This program requires 1 argument: the path to a map." << endl;
+		return 1;
+	}
+
 	try {
-		Game g;
+		Game g(argv[1]);
 	
 		ALLEGRO_THREAD* anim = al_create_thread(Game::startAnim, &g);
 		if(anim)
@@ -118,7 +125,8 @@ int main(int argc, char *argv[]) {
 		al_destroy_thread(input);
 	}
 	catch (Failure f) {
-		cerr << f.what();
+		cerr << f.what() << endl;
+		return 1;
 	}
 	return 0;
 }

@@ -481,9 +481,9 @@ static int parse_tileset(xmlTextReaderPtr reader, tmx_tileset **ts_headadr, cons
 		if (!(ab_path = mk_absolute_path(filename, value))) return 0;
 		tmx_free_func(value);
 		if (!(sub_reader = create_parser(ab_path))) return 0; /* opens */
-		tmx_free_func(ab_path);
-		ret = parse_tileset_sub(sub_reader, res, filename); /* and parses the tsx file */
+		ret = parse_tileset_sub(sub_reader, res, ab_path); /* and parses the tsx file */
 		xmlFreeTextReader(sub_reader);
+		tmx_free_func(ab_path);
 		return ret;
 	}
 	

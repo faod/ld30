@@ -14,6 +14,7 @@
 #include "main.hpp"
 #include "Character.hpp"
 #include "Player.hpp"
+#include "map.hpp"
 
 #include <Box2D/Box2D.h>
 
@@ -24,7 +25,7 @@ class Game
 {
 	public:
 	
-	Game();
+	Game(char *mapPath);
 	~Game();
 
 	static const int pixelpm = 128; 
@@ -39,6 +40,7 @@ class Game
 
 	Main m;
 	b2World w;
+	Map map;
 
 	private:
 	void anim(ALLEGRO_THREAD*);
