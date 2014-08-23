@@ -21,7 +21,6 @@ class Player: public Character
 
 	private:
 	ALLEGRO_BITMAP* bm;
-	b2Vec2			dir;
 
 	b2BodyDef	bodyDef;
 	b2Body*		body;
