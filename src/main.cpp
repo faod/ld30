@@ -54,7 +54,7 @@ Main::Main(int screen_w, int screen_h) {
 	//if (!al_install_audio()) throw Failure("failed to initialise audio support!");
 	//if (!al_init_acodec_addon()) throw Failure("failed to initialise audio codecs support!");
 
-	//if (!al_init_primitives_addon()) throw Failure("failed to initialise primitives!");
+	if (!al_init_primitives_addon()) throw Failure("failed to initialise primitives!");
 
 	al_init_font_addon();
 	if (!(console_font = al_create_builtin_font())) throw Failure("failed to initialise console font!");
@@ -76,7 +76,7 @@ Main::Main(int screen_w, int screen_h) {
 Main::~Main() {
 	al_destroy_font(console_font);
 
-	//al_shutdown_primitives_addon();
+	al_shutdown_primitives_addon();
 	
 	//al_uninstall_audio();
 
@@ -100,43 +100,14 @@ Main::~Main() {
 int main(int argc, char *argv[]) {
 	try {
 		Main m(800, 600);
-		Matrix identity, model;
-		Camera camera;
-		Shaders shaders;
-		Cube c;
-		AxisDrawer ad(10.);
-		ALLEGRO_COLOR grey  = al_map_rgb(55, 55, 55);
-
-		shaders.loadDefaultShaders();
-		GLuint model_mat = glGetUniformLocation(shaders.defProgId, "model_m4");
-		
-		camera.frustum(800, 600, .1, 100., 45.);
-		camera.setPosition(-5., -5., -5.);
-		camera.setOrientation(ALLEGRO_PI/5., -ALLEGRO_PI/4., 0.);
-		camera.foenum();
-		camera.loadProjectionMatrix(shaders.defProgId);
-		camera.loadViewMatrix(shaders.defProgId);
-
 		ALLEGRO_EVENT ev;
 		int step = 0;
 		al_start_timer(m.animationTimer);
+		
 		bool loop = true;
 		while (al_wait_for_event(m.animationEQ, &ev), loop) {
-			glClear(GL_DEPTH_BUFFER_BIT);
-			al_clear_to_color(grey);
-
-			model = RotationMatrix(1, 0.005 * step) * RotationMatrix(0, 0.002 * step); step++;
-			glUniformMatrix4dv(model_mat, 1, GL_FALSE, model.mat);
-			c.draw();
-
-			glUniformMatrix4dv(model_mat, 1, GL_FALSE, identity.mat);
-			ad.draw();
-
+			al_clear_to_color(al_map_rgb(0., 0., 0.));
 			al_flip_display();
-
-			while (al_get_next_event(m.inputEQ, &ev))
-				if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-					loop = false;
 		}
 	}
 	catch (Failure f) {
