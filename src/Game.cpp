@@ -1,9 +1,12 @@
 #include "Game.hpp"
 #include "Player.hpp"
+#include "Monster.hpp"
 
-Game::Game() : m(800, 600)
+Game::Game() : m(800, 600) ,  player(new Player(*this, b2Vec2(10., 10.)))
 {
-	characters.push_back(new Player(*this, b2Vec2(10., 10.)));
+	characters.push_back(player);
+	characters.push_back(new Monster(*this, b2Vec2(80., 10.)));
+	characters.push_back(new Monster(*this, b2Vec2(140., 10.)));
 }
 Game::~Game()
 {
@@ -55,6 +58,7 @@ void Game::input(ALLEGRO_THREAD* t)
 				m.loop = false;
 				break;
 			}
+//			if (ev.type == ALLEGRO_
 		}
 	}
 }
