@@ -23,6 +23,8 @@ class Player: public Character
 	virtual void stopLeft();
 	virtual void stopRight();
 
+	b2Vec2 getCenter() const; 
+
 	virtual ~Player();
 
 	private:

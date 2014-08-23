@@ -27,11 +27,15 @@ class Game
 	Game();
 	~Game();
 
-	static const int pixelpm = 30; 
+	static const int pixelpm = 128; 
 
 	static void *startAnim(ALLEGRO_THREAD* t, void *arg);
 	static void *startInput(ALLEGRO_THREAD* t, void *arg);
 	static void *startRefresh(void *arg);
+
+	
+	//RETURNS COORD IN PIXEL
+	b2Vec2 getScreenCorner() const;
 
 	Main m;
 	b2World w;

@@ -42,7 +42,7 @@ void Player::tick()
 
 void Player::draw() const
 {
-	al_draw_bitmap(bm, body->GetPosition().x * Game::pixelpm, body->GetPosition().y * Game::pixelpm, 0);
+	al_draw_bitmap(bm, al_get_display_width(g.m.display)/2 -al_get_bitmap_width(bm) / 2 , al_get_display_height(g.m.display)/2 - al_get_bitmap_height(bm)/2 , 0);
 }
 
 void Player::moveLeft()
@@ -66,4 +66,9 @@ void Player::stopLeft()
 void Player::stopRight()
 {
 	right = false;
+}
+
+b2Vec2 Player::getCenter() const
+{
+	return body->GetWorldCenter();
 }

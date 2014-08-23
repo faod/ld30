@@ -53,9 +53,8 @@ void Game::anim(ALLEGRO_THREAD* t)
 void Game::input(ALLEGRO_THREAD* t)
 {
 	ALLEGRO_EVENT ev;
- 	while (m.loop)
-	{
- 		if(al_get_next_event(m.inputEQ, &ev))
+ 
+ 		while(al_wait_for_event(m.inputEQ, &ev), m.loop)
 		{
 			if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
  			{
@@ -82,7 +81,7 @@ void Game::input(ALLEGRO_THREAD* t)
 			}
 
 		}
-	}
+	
 }
 
 void Game::refresh()
@@ -94,7 +93,7 @@ void Game::refresh()
  	while (m.loop)
 	{
 		al_wait_for_event(m.refreshEQ, &ev);
-		al_clear_to_color(al_map_rgb(255, 255, 255));	
+		al_clear_to_color(al_map_rgb(0, 0, 0));	
 
 		for(std::vector<Character*>::const_iterator it = characters.begin(), end = characters.end() ; it != end; ++it)
 		{
@@ -103,4 +102,10 @@ void Game::refresh()
 
 		al_flip_display();
 	}
+}
+
+
+b2Vec2 Game::getScreenCorner() const
+{
+	return b2Vec2(player->getCenter().x * pixelpm - al_get_display_width(m.display) / 2, player->getCenter().y * pixelpm - al_get_display_height(m.display) /2);
 }
