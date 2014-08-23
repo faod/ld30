@@ -14,7 +14,7 @@
 using std::cerr;
 
 // Initialize Allegro and its addons
-Main::Main(int screen_w, int screen_h) {
+Main::Main(int screen_w, int screen_h): loop(true) {
 	this->screen_h = screen_h;
 	this->screen_w = screen_w;
 

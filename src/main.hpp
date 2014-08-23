@@ -41,7 +41,7 @@ public:
 	ALLEGRO_TIMER *refreshTimer, *animationTimer;
 	ALLEGRO_FONT *console_font;
 	
-	bool loop = true;
+	bool loop;
 	/* Constructor may throw a `Failure` exception. */
 	Main(int screen_w, int screen_h);
 	~Main();
