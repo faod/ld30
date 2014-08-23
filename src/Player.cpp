@@ -32,5 +32,5 @@ void Player::tick()
 
 void Player::draw() const
 {
-	al_draw_bitmap(bm, body->GetPosition().x, body->GetPosition().y, 0);
+	al_draw_bitmap(bm, body->GetPosition().x * Game::pixelpm, body->GetPosition().y * Game::pixelpm, 0);
 }

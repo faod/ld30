@@ -27,6 +27,8 @@ class Game
 	Game();
 	~Game();
 
+	static const int pixelpm = 30; 
+
 	static void *startAnim(ALLEGRO_THREAD* t, void *arg);
 	static void *startInput(ALLEGRO_THREAD* t, void *arg);
 	static void *startRefresh(void *arg);
