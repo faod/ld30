@@ -26,13 +26,19 @@ link_directories("${ALLEGRO_HOME}/lib")
 #    Env
 #-----------#
 
+add_definitions(-DWANT_ZLIB)
+include(FindZLIB)
+find_package(ZLIB REQUIRED)
+include_directories(${ZLIB_INCLUDE_DIR})
+
+add_definitions(-DWANT_XML)
+include(FindLibXml2)
+find_package(LibXml2 REQUIRED)
+include_directories(${LIBXML2_INCLUDE_DIR})
+
 include("${PROJECT_SOURCE_DIR}/cmake/alleg.cmake")
 make_libs_filenames(deps ${ALLEG_VERSION})
 append_deps(deps "${deps}")
-
-find_package("OpenGL")
-include_directories("${OPENGL_INCLUDE_DIR}")
-list(APPEND deps "${OPENGL_gl_LIBRARY}" "${OPENGL_glu_LIBRARY}")
 
 set(CMAKE_CXX_FLAGS "--std=c++11")
 
