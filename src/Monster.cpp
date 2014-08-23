@@ -9,6 +9,7 @@ Monster::Monster(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64))
 
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(p.x, p.y);
+	bodyDef.fixedRotation = true;
 
 	body = g.w.CreateBody(&bodyDef);
 
