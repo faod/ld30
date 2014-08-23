@@ -15,5 +15,6 @@
   </object>
   <object name="spawn" x="287" y="675" width="53" height="155"/>
   <object name="finish" x="3579" y="509" width="321" height="715"/>
+  <object name="Block1" x="256" y="896" width="2048" height="256"/>
  </objectgroup>
 </map>
