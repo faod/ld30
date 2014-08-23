@@ -2,7 +2,7 @@
 #include "Player.hpp"
 #include "Monster.hpp"
 
-Game::Game() : m(800, 600) ,  player(new Player(*this, b2Vec2(10., 10.)))
+Game::Game() : m(800, 600), w(b2Vec2(0.0f, -10.0f)),  player(new Player(*this, b2Vec2(10., 10.)))
 {
 	characters.push_back(player);
 	characters.push_back(new Monster(*this, b2Vec2(80., 10.)));

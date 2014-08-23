@@ -15,6 +15,8 @@
 #include "Character.hpp"
 #include "Player.hpp"
 
+#include <Box2D/Box2D.h>
+
 #include <vector>
 #include <memory>
 
@@ -30,7 +32,7 @@ class Game
 	static void *startRefresh(void *arg);
 
 	Main m;
-
+	b2World w;
 
 	private:
 	void anim(ALLEGRO_THREAD*);
