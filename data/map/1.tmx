@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="10" tilewidth="128" tileheight="128" backgroundcolor="#cde3ff">
+ <tileset firstgid="1" source="../tilesets/grass.tsx"/>
+ <tileset firstgid="21" source="../tilesets/dirt.tsx"/>
+ <layer name="tiles" width="100" height="10">
+  <data encoding="base64" compression="zlib">
+   eJztlkkKgDAMRYM4LNw543z/U5qiYCmJjThC++EtbT59GArg4+PjI0+F1AwNUn5XzbkoF90B/XfVnIvNhas+YiTZyJHwhZkSFy76UC4iJNV4OlIXivmFPn8J5eJpH39zkcG6E65QbGcFsO8ZDnP36PMpF0c+BuDfQRTmu+huFwFcv8v2RCfJTlV3RN1pStwHaPO5b2z/xyDsSM0ekUnAbOlg9pGcybEAaxkT8w==
+  </data>
+ </layer>
+ <objectgroup name="physics" width="100" height="10">
+  <object name="block" x="0" y="384" width="128" height="640"/>
+  <object name="block" x="0" y="1024" width="2304" height="128"/>
+  <object name="block" x="2688" y="1280">
+   <polygon points="-128,-128 -256,-256 1024,-256 896,-128"/>
+  </object>
+  <object name="spawn" x="256" y="896" width="128" height="128"/>
+  <object name="monsterspawn1" x="3456" y="896" width="128" height="128"/>
+  <object name="kill" x="2304" y="1152" width="256" height="128"/>
+  <object name="monsterspawn2" x="7424" y="896" width="128" height="128"/>
+  <object name="block" x="6016" y="1024">
+   <polygon points="0,0 128,128 1536,128 1664,0"/>
+  </object>
+  <object name="kill" x="3584" y="1152" width="512" height="128"/>
+  <object name="block" x="4096" y="1024" width="768" height="128"/>
+  <object name="block" x="4480" y="896" width="384" height="128"/>
+  <object name="block" x="4608" y="768" width="256" height="128"/>
+  <object name="block" x="4736" y="768">
+   <polygon points="0,0 512,0 640,-128 0,-128"/>
+  </object>
+  <object name="kill" x="5248" y="1152" width="384" height="128"/>
+  <object name="block" x="4736" y="1152" width="512" height="128"/>
+  <object name="secret" x="4864" y="1024" width="128" height="128"/>
+  <object name="block" x="5632" y="1152" width="128" height="128"/>
+  <object name="kill" x="5760" y="1152" width="384" height="128"/>
+  <object name="kill" x="7552" y="1152" width="512" height="128"/>
+  <object name="block" x="8064" y="1024" width="256" height="256"/>
+  <object name="block" x="8192" y="896" width="256" height="128"/>
+  <object name="block" x="8320" y="768" width="256" height="128"/>
+  <object name="block" x="8448" y="640" width="256" height="128"/>
+  <object name="block" x="8576" y="512" width="256" height="128"/>
+  <object name="block" x="8704" y="384" width="256" height="128"/>
+  <object name="block" x="8832" y="256">
+   <polygon points="0,0 0,128 1024,128 1152,0"/>
+  </object>
+  <object name="block" x="9856" y="384">
+   <polygon points="0,0 0,384 -512,896 -128,0"/>
+  </object>
+  <object name="kill" x="9472" y="1152" width="1280" height="128"/>
+  <object name="block" x="10624" y="1024">
+   <polygon points="0,0 128,128 2176,128 2176,0"/>
+  </object>
+  <object name="finish" x="12672" y="512" width="128" height="512"/>
+ </objectgroup>
+</map>
