@@ -26,7 +26,7 @@ Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64)), 
 	fixtureDef.filter.categoryBits = PLAYER;
 	fixtureDef.filter.maskBits = MONSTER | TRIGGER | WALL;
 
-	body->CreateFixture(&fixtureDef);
+	(body->CreateFixture(&fixtureDef))->SetUserData(this);
 
 	//add "feet" to detect floor
 	dynamicBox.SetAsBox(0.1, 0.1, b2Vec2(0, 0.9f), 0);
@@ -35,6 +35,15 @@ Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64)), 
 	fixtureDef.filter.categoryBits = FOOT;
 	fixtureDef.filter.maskBits = WALL | MONSTER;
 	(body->CreateFixture(&fixtureDef))->SetUserData(this);
+
+	//add sword to kill monsters
+	dynamicBox.SetAsBox(0.4, 0.1, b2Vec2(0.65, 0), 0);
+	swordDef.shape = &dynamicBox;
+	swordDef.isSensor = true;
+	swordDef.density = 0.1;
+	swordDef.filter.categoryBits = SWORD;
+	swordDef.filter.maskBits = MONSTER;
+	(body->CreateFixture(&swordDef))->SetUserData(this);
 }
 
 Player::~Player()
@@ -44,6 +53,7 @@ Player::~Player()
 
 void Player::tick()
 {
+	//Velocity update
 	float needvel;
 	if(right && landed)
 		needvel = 10.;
@@ -60,6 +70,8 @@ void Player::tick()
 	float force = body->GetMass() * velchange / (1 /static_cast<float>( g.m.animation_tick));
 	body->ApplyForce(b2Vec2(force, 0), body->GetWorldCenter(), true);
 	
+
+	//damage over time management
 	if(contact)
 	{
 		if(lastproc == 0)
@@ -71,6 +83,8 @@ void Player::tick()
 			lastproc = 0;
 
 	}
+
+	//sword side TO UPDATE TO FIT SPINE SIDE
 
 }
 

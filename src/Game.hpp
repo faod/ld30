@@ -25,7 +25,7 @@
 
 #define is_zero(x) (x < 1e-6 && x > -1e-6)
 
-enum cat { PLAYER = 0x0001, MONSTER = 0x0002, TRIGGER = 0x0004, WALL = 0x0008, FOOT = 0x0010};
+enum cat { PLAYER = 0x0001, MONSTER = 0x0002, TRIGGER = 0x0004, WALL = 0x0008, FOOT = 0x0010, SWORD = 0x0020};
 
 class Game
 {

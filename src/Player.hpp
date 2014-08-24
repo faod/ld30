@@ -40,6 +40,8 @@ class Player: public Character
 	b2BodyDef	bodyDef;
 	b2Body*		body;
 	b2FixtureDef fixtureDef;
+	b2FixtureDef swordDef;
+	
 	b2PolygonShape dynamicBox;
 
 	bool left;
