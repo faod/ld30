@@ -25,10 +25,10 @@ void* al_img_loader(const char *path) {
 	ALLEGRO_PATH   *alpath = NULL;
 	
 	if (!(alpath = al_create_path(path))) return NULL;
-	//al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP);
+	al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP);
 	al_set_new_bitmap_format(ALLEGRO_PIXEL_FORMAT_ANY_WITH_ALPHA);
 	res = al_load_bitmap(al_path_cstr(alpath, ALLEGRO_NATIVE_PATH_SEP));
-	//al_set_new_bitmap_flags(0);
+	al_set_new_bitmap_flags(0);
 	al_destroy_path(alpath);
 	
 	return (void*)res;
@@ -76,7 +76,7 @@ void Map::render_map() {
 	
 	w = tmxMap->width  * tmxMap->tile_width;  // Bitmap's width and height 
 	h = tmxMap->height * tmxMap->tile_height;
-	//al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP);
+	al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP);
 	while (layers) {
 		if (layers->visible && layers->type == L_LAYER) {
 			if (!(layer_bmp = al_create_bitmap(w, h))) throw Failure("failed to create bitmap!");
@@ -184,7 +184,7 @@ void Map::render_map() {
 		}
 		layers = layers->next;
 	}
-	//al_set_new_bitmap_flags(0);
+	al_set_new_bitmap_flags(0);
 	al_set_target_backbuffer(al_get_current_display());
 }
 
