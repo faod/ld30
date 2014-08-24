@@ -141,3 +141,13 @@ void Monster::jump()
 {
 	std::cout << "Monster jumped Cyto's mommy" << std::endl;
 }
+
+void Monster::damage(int qt)
+{
+	life -= qt;
+	if(life > 100)
+		life = 100;
+	
+	if(life < 0); //TODO
+		
+}
