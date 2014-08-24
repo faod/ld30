@@ -70,8 +70,9 @@ Monster::~Monster()
 
 void Monster::tick()
 {
-	model->skeleton->x = (body->GetPosition().x + .25) * g.pixelpm;
-	model->skeleton->y = (body->GetPosition().y + .9)  * g.pixelpm;
+	b2Vec2 screen = g.getScreenCorner();
+	model->skeleton->x = (body->GetPosition().x) * g.pixelpm - screen.x;
+	model->skeleton->y = (body->GetPosition().y + .9)  * g.pixelpm - screen.y;
 	skeletonUpdate(model, 1 / (float) g.m.animation_tick);
 }
 

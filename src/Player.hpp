@@ -23,6 +23,8 @@ class Player: public Character
 	virtual void stopLeft();
 	virtual void stopRight();
 	virtual void damage(int qt);
+	virtual void on_jump();
+	virtual void on_land();
 
 	b2Vec2 getCenter() const; 
 
@@ -39,6 +41,7 @@ class Player: public Character
 
 	bool left;
 	bool right;
+	bool landed;
 
 	int life;
 };

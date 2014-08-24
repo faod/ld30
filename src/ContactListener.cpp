@@ -18,7 +18,6 @@ void ContactListener::BeginContact(b2Contact *contact)
 			}
 			else if(fixB->GetFilterData().categoryBits == MONSTER)
 			{
-				contact->setEnabled(false);
 			}	
 		break;
 		case FOOT:
