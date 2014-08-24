@@ -128,6 +128,27 @@ void Game::refresh()
 				b2Fixture* fixture = elem->GetFixtureList();
 				while(fixture)
 				{
+					ALLEGRO_COLOR col;
+					switch(fixture->GetFilterData().categoryBits)
+					{
+						case PLAYER:	
+							col = al_map_rgb(128, 0, 0);
+							break;
+						case WALL:
+							col = al_map_rgb(0, 0, 255);
+							break;
+						case TRIGGER:
+							col = al_map_rgb(0, 128, 0);
+							break;
+						case MONSTER:
+							col = al_map_rgb(0, 0, 128);
+							break;
+						default:
+							col = al_map_rgb(0, 0, 0);
+							break;
+					};
+
+
 					b2PolygonShape *polygon = dynamic_cast<b2PolygonShape*>(fixture->GetShape());
 					
 					float x1, x2, y1, y2;
@@ -144,7 +165,7 @@ void Game::refresh()
 						x2 = worldc.x * Game::pixelpm;
 						y2 = worldc.y * Game::pixelpm;
 					
-						al_draw_line(x1 - screen.x, y1 - screen.y, x2 - screen.x, y2 - screen.y, al_map_rgb(0,0,255), 2.);
+						al_draw_line(x1 - screen.x, y1 - screen.y, x2 - screen.x, y2 - screen.y, col, 2.);
 					}
 						worldc = elem->GetWorldPoint(polygon->GetVertex(i));
 						x1 = worldc.x * Game::pixelpm;
@@ -154,7 +175,7 @@ void Game::refresh()
 						x2 = worldc.x * Game::pixelpm;
 						y2 = worldc.y * Game::pixelpm;
 					
-						al_draw_line(x1 - screen.x, y1 - screen.y, x2 - screen.x, y2 - screen.y, al_map_rgb(0,0,255), 2.);
+						al_draw_line(x1 - screen.x, y1 - screen.y, x2 - screen.x, y2 - screen.y, col, 2.);
 
 					fixture = fixture->GetNext();
 				}
