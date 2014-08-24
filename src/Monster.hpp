@@ -37,6 +37,7 @@ class Monster : public Character
 	static spSkeletonJson *jsonSkel;
 	static spAnimationStateData *stateData;
 
+	b2FixtureDef swordDef;
 	int life;
 };
 

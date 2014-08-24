@@ -24,6 +24,15 @@ Monster::Monster(Game& g, b2Vec2 p) : Character(g), life(100)
 
 	body->CreateFixture(&fixtureDef);
 
+	//sword to kill player
+	dynamicBox.SetAsBox(0.4, 0.22, b2Vec2(0.65, -0.2), 0);
+	swordDef.shape = &dynamicBox;
+	swordDef.isSensor = true;
+	swordDef.density = 0.1;
+	swordDef.filter.categoryBits = SWORD;
+	swordDef.filter.maskBits = PLAYER;
+	(body->CreateFixture(&swordDef))->SetUserData(this);
+
 	// Loads the Spine model
 	ALLEGRO_PATH *path, *resourceDir, *file;
 	resourceDir= al_get_standard_path(ALLEGRO_RESOURCES_PATH);
@@ -59,7 +68,7 @@ Monster::Monster(Game& g, b2Vec2 p) : Character(g), life(100)
 	model = loadSkeleton(modelData, stateData);
 	if (!model) throw Failure("Failed to load the monster's skeleton.");
 
-	spAnimationState_setAnimationByName(model->state, 0, "walk",  true);
+	spAnimationState_setAnimationByName(model->state, 0, "slash",  true);
 }
 
 Monster::~Monster()
