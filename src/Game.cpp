@@ -95,7 +95,7 @@ void Game::refresh()
 		al_wait_for_event(m.refreshEQ, &ev);
 		al_clear_to_color(al_map_rgb(0, 0, 0));	
 
-		for(std::vector<Character*>::const_iterator it = characters.begin(), end = characters.end() ; it != end; ++it)
+		for(std::vector<Character*>::const_reverse_iterator it = characters.rbegin(), end = characters.rend() ; it != end; ++it)
 		{
 			(*it)->draw();
 		}

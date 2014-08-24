@@ -44,6 +44,8 @@ void Player::tick()
 	body->ApplyLinearImpulse(b2Vec2(body->GetMass() * (needvel - body->GetLinearVelocity().x), 0.), body->GetWorldCenter(), true);
 }
 
+
+
 void Player::draw() const
 {
 	al_draw_bitmap(bm, al_get_display_width(g.m.display)/2 -al_get_bitmap_width(bm) / 2 , al_get_display_height(g.m.display)/2 - al_get_bitmap_height(bm)/2 , 0);
