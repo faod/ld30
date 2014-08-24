@@ -4,7 +4,7 @@
 #include <string>
 #include <cstdlib>
 
-Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64)), left(false), right(false), life(10)
+Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64)), left(false), right(false), landed(true), contact(false), lastproc(0), life(100)
 {
 	al_set_target_bitmap(bm);
 	al_clear_to_color(al_map_rgb(255, 0, 0));
@@ -33,7 +33,7 @@ Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64)), 
 	fixtureDef.isSensor = true;
 	fixtureDef.density = 0.1;
 	fixtureDef.filter.categoryBits = FOOT;
-	fixtureDef.filter.maskBits = WALL;
+	fixtureDef.filter.maskBits = WALL | MONSTER;
 	(body->CreateFixture(&fixtureDef))->SetUserData(this);
 }
 
@@ -59,6 +59,19 @@ void Player::tick()
 	float velchange = needvel - body->GetLinearVelocity().x;
 	float force = body->GetMass() * velchange / (1 /static_cast<float>( g.m.animation_tick));
 	body->ApplyForce(b2Vec2(force, 0), body->GetWorldCenter(), true);
+	
+	if(contact)
+	{
+		if(lastproc == 0)
+			damage(3);
+			
+		lastproc++;
+
+		if(lastproc >= 60)
+			lastproc = 0;
+
+	}
+
 }
 
 
@@ -128,4 +141,16 @@ void Player::on_jump()
 void Player::on_land()
 {
 	landed = true;
+}
+
+void Player::onMonsterContact()
+{
+	contact = true;
+	lastproc = 0;
+	on_land();
+}
+void Player::onMonsterSeparation()
+{
+	contact = false;
+	on_jump();
 }

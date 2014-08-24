@@ -26,6 +26,9 @@ class Player: public Character
 	virtual void on_jump();
 	virtual void on_land();
 
+	void onMonsterContact();
+	void onMonsterSeparation();
+
 	b2Vec2 getCenter() const; 
 
 	virtual ~Player();
@@ -42,6 +45,8 @@ class Player: public Character
 	bool left;
 	bool right;
 	bool landed;
+	bool contact;
+	int lastproc;
 
 	int life;
 };
