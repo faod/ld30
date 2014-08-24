@@ -17,10 +17,10 @@ Monster::Monster(Game& g, b2Vec2 p) : Character(g), life(100)
 	dynamicBox.SetAsBox(.25f, 0.9f);
 
 	fixtureDef.shape = &dynamicBox;
-	fixtureDef.density = 1.0f;
+	fixtureDef.density = 5.0f;
 	fixtureDef.friction = 0.9f;
 	fixtureDef.filter.categoryBits = MONSTER;
-	fixtureDef.filter.maskBits = PLAYER | WALL | MONSTER;
+	fixtureDef.filter.maskBits = PLAYER | WALL | MONSTER | FOOT;
 
 	body->CreateFixture(&fixtureDef);
 
