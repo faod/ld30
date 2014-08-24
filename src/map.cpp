@@ -95,6 +95,12 @@ void Map::render_map() {
 				{	
 					case S_SQUARE:
 					{
+						if(std::string("spawn") == object->name)
+						{
+							playerspawn = object;
+							break;
+						}
+						
 						b2BodyDef groundBodyDef;
 						float width = object->width / static_cast<float>(Game::pixelpm);
 						float height = object->height / static_cast<float>(Game::pixelpm);
@@ -171,4 +177,12 @@ void Map::draw(int x_offset, int y_offset, int width, int height) {
 		}
 		layers = layers->next;
 	}
+}
+
+Player* Map::playerSpawn(Game &g) const
+{
+	if(playerspawn == NULL)
+		throw Failure("spawn not found in tmx map");
+
+	return new Player(g, b2Vec2(playerspawn->x / static_cast<float>(Game::pixelpm), playerspawn->y / static_cast<float>(Game::pixelpm)));	
 }
