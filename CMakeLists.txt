@@ -42,6 +42,7 @@ append_deps(deps "${deps}")
 list(APPEND deps "${ZLIB_LIBRARIES}")
 list(APPEND deps "${LIBXML2_LIBRARIES}")
 list(APPEND deps "-lBox2D")
+include_directories("${PROJECT_SOURCE_DIR}/spine")
 
 set(CMAKE_CXX_FLAGS "--std=c++11")
 
@@ -49,7 +50,7 @@ set(CMAKE_CXX_FLAGS "--std=c++11")
 #   Build
 #-----------#
 
-file(GLOB sources "${PROJECT_SOURCE_DIR}/src/*.cpp" "${PROJECT_SOURCE_DIR}/src/*/*.cpp" "${PROJECT_SOURCE_DIR}/src/*.c" "${PROJECT_SOURCE_DIR}/src/*/*.c")
+file(GLOB sources "${PROJECT_SOURCE_DIR}/src/*.cpp" "${PROJECT_SOURCE_DIR}/src/*/*.cpp" "${PROJECT_SOURCE_DIR}/src/*.c" "${PROJECT_SOURCE_DIR}/src/*/*.c" "${PROJECT_SOURCE_DIR}/spine/spine/*.c")
 add_executable(${PROJECT_NAME} ${sources})
 if(ALLEGRO_STATICLINK)
 	set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_DEFINITIONS "ALLEGRO_STATICLINK")
