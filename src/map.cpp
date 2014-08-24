@@ -7,7 +7,7 @@
 
 #include <Box2D/Box2D.h>
 #include <cassert>
-
+#include <string>
 
 ALLEGRO_COLOR int_to_al_color(int color) {
 	unsigned char r, g, b;

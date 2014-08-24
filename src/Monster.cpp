@@ -59,7 +59,7 @@ Monster::Monster(Game& g, b2Vec2 p) : Character(g), life(100)
 	model = loadSkeleton(modelData, stateData);
 	if (!model) throw Failure("Failed to load the monster's skeleton.");
 
-	spAnimationState_setAnimationByName(model->state, 0, "rest",  true);
+	spAnimationState_setAnimationByName(model->state, 0, "walk",  true);
 }
 
 Monster::~Monster()
