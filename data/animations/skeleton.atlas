@@ -1,0 +1,160 @@
+
+skeleton.png
+size: 126,126
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cervical
+  rotate: false
+  xy: 89, 51
+  size: 16, 26
+  orig: 16, 26
+  offset: 0, 0
+  index: -1
+femur_back
+  rotate: false
+  xy: 21, 56
+  size: 15, 70
+  orig: 15, 70
+  offset: 0, 0
+  index: -1
+femur_front
+  rotate: false
+  xy: 2, 56
+  size: 17, 70
+  orig: 17, 70
+  offset: 0, 0
+  index: -1
+foot_back
+  rotate: true
+  xy: 57, 15
+  size: 38, 11
+  orig: 38, 11
+  offset: 0, 0
+  index: -1
+foot_front
+  rotate: true
+  xy: 33, 11
+  size: 42, 11
+  orig: 42, 11
+  offset: 0, 0
+  index: -1
+hand_back
+  rotate: false
+  xy: 89, 34
+  size: 16, 15
+  orig: 16, 15
+  offset: 0, 0
+  index: -1
+hand_front
+  rotate: false
+  xy: 107, 62
+  size: 19, 14
+  orig: 19, 14
+  offset: 0, 0
+  index: -1
+humerus_back
+  rotate: false
+  xy: 46, 9
+  size: 9, 44
+  orig: 9, 44
+  offset: 0, 0
+  index: -1
+humerus_front
+  rotate: false
+  xy: 115, 78
+  size: 11, 48
+  orig: 11, 48
+  offset: 0, 0
+  index: -1
+lumbar_down
+  rotate: true
+  xy: 81, 20
+  size: 12, 21
+  orig: 12, 21
+  offset: 0, 0
+  index: -1
+lumbar_up
+  rotate: false
+  xy: 99, 85
+  size: 14, 21
+  orig: 14, 21
+  offset: 0, 0
+  index: -1
+pelvic
+  rotate: true
+  xy: 38, 55
+  size: 21, 30
+  orig: 21, 30
+  offset: 0, 0
+  index: -1
+radius_back
+  rotate: true
+  xy: 68, 108
+  size: 6, 45
+  orig: 6, 45
+  offset: 0, 0
+  index: -1
+radius_front
+  rotate: false
+  xy: 16, 3
+  size: 7, 51
+  orig: 7, 51
+  offset: 0, 0
+  index: -1
+ribs
+  rotate: false
+  xy: 38, 78
+  size: 28, 36
+  orig: 28, 36
+  offset: 0, 0
+  index: -1
+scapula
+  rotate: false
+  xy: 107, 39
+  size: 16, 21
+  orig: 16, 21
+  offset: 0, 0
+  index: -1
+skull
+  rotate: true
+  xy: 68, 79
+  size: 27, 29
+  orig: 27, 29
+  offset: 0, 0
+  index: -1
+sword
+  rotate: false
+  xy: 38, 116
+  size: 75, 10
+  orig: 75, 10
+  offset: 0, 0
+  index: -1
+tibia_back
+  rotate: false
+  xy: 2, 2
+  size: 12, 52
+  orig: 12, 52
+  offset: 0, 0
+  index: -1
+tibia_front
+  rotate: false
+  xy: 70, 23
+  size: 9, 54
+  orig: 9, 54
+  offset: 0, 0
+  index: -1
+ulna_back
+  rotate: false
+  xy: 81, 35
+  size: 6, 42
+  orig: 6, 42
+  offset: 0, 0
+  index: -1
+ulna_front
+  rotate: false
+  xy: 25, 4
+  size: 6, 50
+  orig: 6, 50
+  offset: 0, 0
+  index: -1
