@@ -36,6 +36,8 @@ class Monster : public Character
 	static spAtlas *modelAtlas;
 	static spSkeletonJson *jsonSkel;
 	static spAnimationStateData *stateData;
+
+	int life;
 };
 
 #endif

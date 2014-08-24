@@ -6,7 +6,7 @@ spAtlas* Monster::modelAtlas = NULL;
 spSkeletonJson* Monster::jsonSkel = NULL;
 spAnimationStateData* Monster::stateData = NULL;
 
-Monster::Monster(Game& g, b2Vec2 p) : Character(g)
+Monster::Monster(Game& g, b2Vec2 p) : Character(g), life(100)
 {
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(p.x, p.y);
@@ -78,8 +78,24 @@ void Monster::tick()
 
 void Monster::draw() const
 {
-	//al_draw_bitmap(bm, body->GetPosition().x * Game::pixelpm, body->GetPosition().y * Game::pixelpm, 0);
 	skeletonDraw(model);
+	
+	//hp bar
+	const b2Vec2 screen = g.getScreenCorner();
+	const b2Vec2 pos 	= body->GetPosition();
+
+	al_draw_rectangle((pos.x -0.25f) * Game::pixelpm - screen.x,
+					  (pos.y -0.9f)  * Game::pixelpm - screen.y - 15,
+					  (pos.x + 0.25f) * Game::pixelpm - screen.x,
+					  (pos.y -0.9f)  * Game::pixelpm - screen.y -10,
+					  al_map_rgb(80, 0, 0),
+					  1);
+	al_draw_filled_rectangle((pos.x -0.25f) * Game::pixelpm - screen.x + 1,
+							 (pos.y -0.9f ) * Game::pixelpm - screen.y - 14,
+							 (pos.x -0.25f) * Game::pixelpm - screen.x + (life * (0.5f * Game::pixelpm - 2)) / 100,
+							 (pos.y -0.9f ) * Game::pixelpm - screen.y - 11,
+							 al_map_rgb(255, 0, 0));
+	
 }
 
 void Monster::moveLeft()
