@@ -8,7 +8,10 @@ class b2World;
 
 class Map {
 	tmx_map *tmxMap;
-	b2World &w;
+	b2World &wo;
+
+	tmx_object *playerspawn;
+	void render_map();
 public:
 	Map(const char *filename, b2World& w);
 	~Map();

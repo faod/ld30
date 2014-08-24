@@ -68,13 +68,13 @@ void render_layer(tmx_map *map, tmx_layer *layer) {
 	}
 }
 
-void render_map(tmx_map *map, b2World& wo) {
+void Map::render_map() {
 	ALLEGRO_BITMAP *layer_bmp = NULL;
-	tmx_layer *layers = map->ly_head;
+	tmx_layer *layers = tmxMap->ly_head;
 	unsigned long w, h;
 	
-	w = map->width  * map->tile_width;  // Bitmap's width and height 
-	h = map->height * map->tile_height;
+	w = tmxMap->width  * tmxMap->tile_width;  // Bitmap's width and height 
+	h = tmxMap->height * tmxMap->tile_height;
 	
 	while (layers) {
 		if (layers->visible && layers->type == L_LAYER) {
@@ -82,7 +82,7 @@ void render_map(tmx_map *map, b2World& wo) {
 			al_set_target_bitmap(layer_bmp);
 			al_clear_to_color(al_map_rgba_f(0., 0., 0., 0.));
 
-			render_layer(map, layers);
+			render_layer(tmxMap, layers);
 			layers->user_data = layer_bmp;
 		}
 		else if(layers->type == L_OBJGR)
@@ -145,7 +145,7 @@ void render_map(tmx_map *map, b2World& wo) {
 	al_set_target_backbuffer(al_get_current_display());
 }
 
-Map::Map(const char *filename, b2World& wo) : w(wo) {
+Map::Map(const char *filename, b2World& w) : wo(w), playerspawn(NULL)  {
 	rsc_img_load_func = al_img_loader;
 	rsc_img_free_func = (void (*)(void*))al_destroy_bitmap;
 
@@ -153,7 +153,7 @@ Map::Map(const char *filename, b2World& wo) : w(wo) {
 	if (!tmxMap)
 		throw Failure(tmx_strerr());
 
-	render_map(tmxMap, w);
+	render_map();
 }
 
 Map::~Map() {
