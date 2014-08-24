@@ -13,11 +13,11 @@ Monster::Monster(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64))
 
 	body = g.w.CreateBody(&bodyDef);
 
-	dynamicBox.SetAsBox(.1f, .1f);
+	dynamicBox.SetAsBox(.25f, 0.9f);
 
 	fixtureDef.shape = &dynamicBox;
 	fixtureDef.density = 1.0f;
-	fixtureDef.friction = 0.5f;
+	fixtureDef.friction = 0.9f;
 
 	body->CreateFixture(&fixtureDef);
 }

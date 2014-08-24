@@ -17,10 +17,10 @@ Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64)), 
 
 	body = g.w.CreateBody(&bodyDef);
 
-	dynamicBox.SetAsBox(.1f, .1f);
+	dynamicBox.SetAsBox(.25f, 0.9f);
 	
 	fixtureDef.shape = &dynamicBox;
-	fixtureDef.density = 1.0f;
+	fixtureDef.density = 5.0f;
 	fixtureDef.friction = 0.5f;
 
 	body->CreateFixture(&fixtureDef);
@@ -78,6 +78,8 @@ void Player::moveRight()
 
 void Player::jump()
 {
+	if(is_zero(body->GetLinearVelocity().y))
+		body->ApplyLinearImpulse(b2Vec2(0, -30), body->GetWorldCenter(), true);
 }
 
 void Player::stopLeft()

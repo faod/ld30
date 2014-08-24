@@ -21,6 +21,9 @@
 #include <vector>
 #include <memory>
 
+
+#define is_zero(x) (x < 1e-6 && x > -1e-6)
+
 class Game
 {
 	public:

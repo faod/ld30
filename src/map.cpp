@@ -8,6 +8,7 @@
 #include <Box2D/Box2D.h>
 #include <cassert>
 
+
 ALLEGRO_COLOR int_to_al_color(int color) {
 	unsigned char r, g, b;
 	
@@ -111,7 +112,6 @@ void render_map(tmx_map *map, b2World& wo) {
 					}
 					case S_POLYGON:
 					{
-						std::cout << "polygon obj" << std::endl;
 						b2BodyDef groundBodyDef;
 						groundBodyDef.position.Set(object->x / Game::pixelpm, object->y / Game::pixelpm);
 

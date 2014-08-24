@@ -109,6 +109,21 @@ void Game::refresh()
 			b2Body* elem = w.GetBodyList();
 			while(elem)
 			{
+				const b2Vec2 screen = getScreenCorner();
+				//Draw center +velocity vector
+				b2Vec2 center = elem->GetWorldCenter();
+				al_draw_line(center.x * Game::pixelpm - (screen.x + 5), center.y * Game::pixelpm - screen.y,
+							 center.x * Game::pixelpm - (screen.x - 5), center.y * Game::pixelpm - screen.y,
+							 al_map_rgb(0, 255, 0), 1.);
+
+				al_draw_line(center.x * Game::pixelpm - screen.x, center.y * Game::pixelpm - (screen.y + 5),
+							 center.x * Game::pixelpm - screen.x, center.y * Game::pixelpm - (screen.y - 5),
+							 al_map_rgb(0, 255, 0), 1.);
+				b2Vec2 velo = elem->GetLinearVelocity();
+				al_draw_line(center.x * Game::pixelpm - screen.x, center.y * Game::pixelpm - screen.y,
+							 center.x * Game::pixelpm - screen.x + (velo.x * 5), center.y * Game::pixelpm - screen.y + (velo.y * 5), al_map_rgb(0, 255, 0), 1.);
+
+				//Draw shapes
 				b2Fixture* fixture = elem->GetFixtureList();
 				while(fixture)
 				{
@@ -117,7 +132,6 @@ void Game::refresh()
 					float x1, x2, y1, y2;
 					b2Vec2 worldc; 
 
-					const b2Vec2 screen = getScreenCorner();
 					int i;
 					for(i=0; i<polygon->GetVertexCount()-1; i++) {
 						
