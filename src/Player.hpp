@@ -22,7 +22,7 @@ class Player: public Character
 	virtual void jump();
 	virtual void stopLeft();
 	virtual void stopRight();
-	virtual void damage(int qt);
+	virtual bool damage(int qt);
 	virtual void on_jump();
 	virtual void on_land();
 

@@ -19,7 +19,9 @@ class Monster : public Character
 	virtual void moveLeft();
 	virtual void moveRight();
 	virtual void jump();
+	bool goingRight();
 
+	virtual bool damage(int);
 	virtual ~Monster();
 
 	private:
@@ -39,6 +41,10 @@ class Monster : public Character
 
 	b2FixtureDef swordDef;
 	b2Fixture* swordFix;
+
+	
+	bool right;
+
 	int life;
 };
 

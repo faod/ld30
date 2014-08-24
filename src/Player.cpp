@@ -140,13 +140,15 @@ b2Vec2 Player::getCenter() const
 	return body->GetWorldCenter();
 }
 
-void Player::damage(int qt)
+bool Player::damage(int qt)
 {
 	life -= qt;
 	if(life > 100)
 		life = 100;
 	if (life <= 0)
-		g.m.loop = 0;
+		return true;
+	
+	return false;
 }
 void Player::on_jump()
 {

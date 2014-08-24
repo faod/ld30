@@ -18,7 +18,7 @@ class Character
 	virtual void jump() {}
 	virtual void stopLeft() {}
 	virtual void stopRight() {}
-	virtual void damage(int )  {}
+	virtual bool damage(int )  { return false;} //true if dmg were lethal therefore should kill (delete) character after
 
 	virtual void on_jump(){}
 	virtual void on_land(){}

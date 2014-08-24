@@ -6,7 +6,7 @@ spAtlas* Monster::modelAtlas = NULL;
 spSkeletonJson* Monster::jsonSkel = NULL;
 spAnimationStateData* Monster::stateData = NULL;
 
-Monster::Monster(Game& g, b2Vec2 p) : Character(g), swordFix(NULL), life(100)
+Monster::Monster(Game& g, b2Vec2 p) : Character(g), swordFix(NULL),right(true), life(100)
 {
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(p.x, p.y);
@@ -109,8 +109,13 @@ void Monster::draw() const
 	
 }
 
+bool Monster::goingRight()
+{
+	return right;
+}
 void Monster::moveLeft()
 {
+	right = false;
 	//animation left
 	model->skeleton->flipX = 1;
 	std::cout << "Monster moved on the left" << std::endl;
@@ -125,6 +130,7 @@ void Monster::moveLeft()
 
 void Monster::moveRight()
 {
+	right = true;
 	//animation right
 	model->skeleton->flipX = 0;
 	std::cout << "Monster moved on the right" << std::endl;
@@ -142,12 +148,13 @@ void Monster::jump()
 	std::cout << "Monster jumped Cyto's mommy" << std::endl;
 }
 
-void Monster::damage(int qt)
+bool Monster::damage(int qt)
 {
 	life -= qt;
 	if(life > 100)
 		life = 100;
 	
-	if(life < 0); //TODO
-		
+	if(life <= 0) return true; 
+
+	return false;
 }
