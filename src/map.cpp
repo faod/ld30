@@ -110,9 +110,18 @@ void Map::render_map() {
 						b2Body* groundBody = wo.CreateBody(&groundBodyDef);
 
 						b2PolygonShape groundBox;
+						b2FixtureDef   groundFixDef;
+						
 
 						groundBox.SetAsBox(width / 2.f, height / 2.f);
-						groundBody->CreateFixture(&groundBox, 0.0f);
+						groundFixDef.shape = &groundBox;
+
+						if(std::string("finish") == object->name)
+						{
+							groundFixDef.isSensor = true;
+						}
+
+						groundBody->CreateFixture(&groundFixDef);
 
 					break;
 					}
