@@ -119,7 +119,7 @@ void Map::render_map() {
 						if(std::string(object->name).find("Block") != std::string::npos)
 						{
 							groundFixDef.filter.categoryBits = WALL;
-							groundFixDef.filter.maskBits = PLAYER | MONSTER;
+							groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
 						}
 						else
 						{
@@ -160,7 +160,7 @@ void Map::render_map() {
 						if(std::string(object->name).find("Block") != std::string::npos)
 						{
 							groundFixDef.filter.categoryBits = WALL;
-							groundFixDef.filter.maskBits = PLAYER | MONSTER;
+							groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
 						}
 						else
 						{

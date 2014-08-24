@@ -20,6 +20,9 @@ class Character
 	virtual void stopRight() {}
 	virtual void damage(int )  {}
 
+	virtual void on_jump(){}
+	virtual void on_land(){}
+
 	virtual ~Character() {}
 
 	protected:
