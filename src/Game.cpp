@@ -6,7 +6,8 @@ bool Game::debug = true;
 
 Game::Game(char *mapPath) : m(1280, 720), w(b2Vec2(0.0f, 10.0f)), map(mapPath, w), player(NULL)
 {
-	player = new Player(*this, b2Vec2(3., 4.5));
+	w.SetContactListener(&listener);
+	player = map.playerSpawn(*this);
 	characters.push_back(player);
 	characters.push_back(new Monster(*this, b2Vec2(2., 2.)));
 	characters.push_back(new Monster(*this, b2Vec2(3., 1.)));

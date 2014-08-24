@@ -21,9 +21,20 @@ Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64)), 
 	
 	fixtureDef.shape = &dynamicBox;
 	fixtureDef.density = 5.0f;
-	fixtureDef.friction = 0.5f;
+	fixtureDef.friction = 0.0f;
+	
+	fixtureDef.filter.categoryBits = PLAYER;
+	fixtureDef.filter.maskBits = MONSTER | TRIGGER | WALL;
 
 	body->CreateFixture(&fixtureDef);
+
+	//add "feet" to detect floor
+	dynamicBox.SetAsBox(0.1, 0.1, b2Vec2(0, 0.9f), 0);
+	fixtureDef.isSensor = true;
+	fixtureDef.density = 0.1;
+	fixtureDef.filter.categoryBits = FOOT;
+	fixtureDef.filter.maskBits = WALL;
+	(body->CreateFixture(&fixtureDef))->SetUserData(this);
 }
 
 Player::~Player()
@@ -34,14 +45,20 @@ Player::~Player()
 void Player::tick()
 {
 	float needvel;
-	if(right)
+	if(right && landed)
 		needvel = 10.;
-	else if(left)
+	else if(left && landed)
 		needvel = -10.;
+	else if(right && !landed)
+		needvel = 7.;
+	else if(left && !landed)
+		needvel = -7.;
 	else
 		needvel = 0.;
-
-	body->ApplyLinearImpulse(b2Vec2(body->GetMass() * (needvel - body->GetLinearVelocity().x), 0.), body->GetWorldCenter(), true);
+	
+	float velchange = needvel - body->GetLinearVelocity().x;
+	float force = body->GetMass() * velchange / (1 /static_cast<float>( g.m.animation_tick));
+	body->ApplyForce(b2Vec2(force, 0), body->GetWorldCenter(), true);
 }
 
 
@@ -78,7 +95,7 @@ void Player::moveRight()
 
 void Player::jump()
 {
-	if(is_zero(body->GetLinearVelocity().y))
+	if(landed)
 		body->ApplyLinearImpulse(b2Vec2(0, -30), body->GetWorldCenter(), true);
 }
 
@@ -103,4 +120,12 @@ void Player::damage(int qt)
 		life = 100;
 	if (life <= 0)
 		g.m.loop = 0;
+}
+void Player::on_jump()
+{
+	landed = false;
+}
+void Player::on_land()
+{
+	landed = true;
 }

@@ -68,13 +68,13 @@ void render_layer(tmx_map *map, tmx_layer *layer) {
 	}
 }
 
-void render_map(tmx_map *map, b2World& wo) {
+void Map::render_map() {
 	ALLEGRO_BITMAP *layer_bmp = NULL;
-	tmx_layer *layers = map->ly_head;
+	tmx_layer *layers = tmxMap->ly_head;
 	unsigned long w, h;
 	
-	w = map->width  * map->tile_width;  // Bitmap's width and height 
-	h = map->height * map->tile_height;
+	w = tmxMap->width  * tmxMap->tile_width;  // Bitmap's width and height 
+	h = tmxMap->height * tmxMap->tile_height;
 	
 	while (layers) {
 		if (layers->visible && layers->type == L_LAYER) {
@@ -82,7 +82,7 @@ void render_map(tmx_map *map, b2World& wo) {
 			al_set_target_bitmap(layer_bmp);
 			al_clear_to_color(al_map_rgba_f(0., 0., 0., 0.));
 
-			render_layer(map, layers);
+			render_layer(tmxMap, layers);
 			layers->user_data = layer_bmp;
 		}
 		else if(layers->type == L_OBJGR)
@@ -95,6 +95,12 @@ void render_map(tmx_map *map, b2World& wo) {
 				{	
 					case S_SQUARE:
 					{
+						if(std::string("spawn") == object->name)
+						{
+							playerspawn = object;
+							break;
+						}
+						
 						b2BodyDef groundBodyDef;
 						float width = object->width / static_cast<float>(Game::pixelpm);
 						float height = object->height / static_cast<float>(Game::pixelpm);
@@ -104,9 +110,29 @@ void render_map(tmx_map *map, b2World& wo) {
 						b2Body* groundBody = wo.CreateBody(&groundBodyDef);
 
 						b2PolygonShape groundBox;
+						b2FixtureDef   groundFixDef;
+						
 
 						groundBox.SetAsBox(width / 2.f, height / 2.f);
-						groundBody->CreateFixture(&groundBox, 0.0f);
+						groundFixDef.shape = &groundBox;
+						
+						if(std::string(object->name).find("Block") != std::string::npos)
+						{
+							groundFixDef.filter.categoryBits = WALL;
+							groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
+						}
+						else
+						{
+							groundFixDef.filter.categoryBits = TRIGGER;
+							groundFixDef.filter.maskBits = PLAYER;
+						}
+
+						if(std::string("finish") == object->name)
+						{
+							groundFixDef.isSensor = true;
+						}
+
+						groundBody->CreateFixture(&groundFixDef);
 
 					break;
 					}
@@ -118,7 +144,8 @@ void render_map(tmx_map *map, b2World& wo) {
 						b2Body* groundBody = wo.CreateBody(&groundBodyDef);
 
 						b2PolygonShape groundBox;
-						
+						b2FixtureDef groundFixDef;
+
 						b2Vec2 *vec = new b2Vec2[object->points_len];
 						for(int i = 0; i < object->points_len; ++i)
 						{
@@ -128,7 +155,20 @@ void render_map(tmx_map *map, b2World& wo) {
 						
 						groundBox.Set(vec, object->points_len);
 						assert(groundBox.Validate());
-						groundBody->CreateFixture(&groundBox, 0.0f);
+						groundFixDef.shape = &groundBox;
+
+						if(std::string(object->name).find("Block") != std::string::npos)
+						{
+							groundFixDef.filter.categoryBits = WALL;
+							groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
+						}
+						else
+						{
+							groundFixDef.filter.categoryBits = TRIGGER;
+							groundFixDef.filter.maskBits = PLAYER;
+						}
+						
+						groundBody->CreateFixture(&groundFixDef);
 					break;
 					}
 					default: throw Failure("Square or polygons in tmx to box2d (render_map), im too lazy for the rest");
@@ -145,7 +185,7 @@ void render_map(tmx_map *map, b2World& wo) {
 	al_set_target_backbuffer(al_get_current_display());
 }
 
-Map::Map(const char *filename, b2World& wo) : w(wo) {
+Map::Map(const char *filename, b2World& w) : wo(w), playerspawn(NULL)  {
 	rsc_img_load_func = al_img_loader;
 	rsc_img_free_func = (void (*)(void*))al_destroy_bitmap;
 
@@ -153,7 +193,7 @@ Map::Map(const char *filename, b2World& wo) : w(wo) {
 	if (!tmxMap)
 		throw Failure(tmx_strerr());
 
-	render_map(tmxMap, w);
+	render_map();
 }
 
 Map::~Map() {
@@ -171,4 +211,12 @@ void Map::draw(int x_offset, int y_offset, int width, int height) {
 		}
 		layers = layers->next;
 	}
+}
+
+Player* Map::playerSpawn(Game &g) const
+{
+	if(playerspawn == NULL)
+		throw Failure("spawn not found in tmx map");
+
+	return new Player(g, b2Vec2(playerspawn->x / static_cast<float>(Game::pixelpm), playerspawn->y / static_cast<float>(Game::pixelpm)));	
 }

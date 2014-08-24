@@ -15,6 +15,7 @@
 #include "Character.hpp"
 #include "Player.hpp"
 #include "map.hpp"
+#include "ContactListener.hpp"
 
 #include <Box2D/Box2D.h>
 
@@ -23,6 +24,8 @@
 
 
 #define is_zero(x) (x < 1e-6 && x > -1e-6)
+
+enum cat { PLAYER = 0x0001, MONSTER = 0x0002, TRIGGER = 0x0004, WALL = 0x0008, FOOT = 0x0010};
 
 class Game
 {
@@ -52,6 +55,7 @@ class Game
 	void input(ALLEGRO_THREAD*);
 	void refresh();
 
+	ContactListener listener;
 	std::vector<Character*> characters; //all the characters list
 	Player* player;						//quick reference to the special character player
 };
