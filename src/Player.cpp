@@ -22,6 +22,9 @@ Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64)), 
 	fixtureDef.shape = &dynamicBox;
 	fixtureDef.density = 5.0f;
 	fixtureDef.friction = 0.5f;
+	
+	fixtureDef.filter.categoryBits = PLAYER;
+	fixtureDef.filter.maskBits = MONSTER | TRIGGER | WALL;
 
 	body->CreateFixture(&fixtureDef);
 }

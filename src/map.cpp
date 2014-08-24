@@ -115,6 +115,17 @@ void Map::render_map() {
 
 						groundBox.SetAsBox(width / 2.f, height / 2.f);
 						groundFixDef.shape = &groundBox;
+						
+						if(std::string(object->name).find("Block") != std::string::npos)
+						{
+							groundFixDef.filter.categoryBits = WALL;
+							groundFixDef.filter.maskBits = PLAYER | MONSTER;
+						}
+						else
+						{
+							groundFixDef.filter.categoryBits = TRIGGER;
+							groundFixDef.filter.maskBits = PLAYER;
+						}
 
 						if(std::string("finish") == object->name)
 						{
@@ -133,7 +144,8 @@ void Map::render_map() {
 						b2Body* groundBody = wo.CreateBody(&groundBodyDef);
 
 						b2PolygonShape groundBox;
-						
+						b2FixtureDef groundFixDef;
+
 						b2Vec2 *vec = new b2Vec2[object->points_len];
 						for(int i = 0; i < object->points_len; ++i)
 						{
@@ -143,7 +155,20 @@ void Map::render_map() {
 						
 						groundBox.Set(vec, object->points_len);
 						assert(groundBox.Validate());
-						groundBody->CreateFixture(&groundBox, 0.0f);
+						groundFixDef.shape = &groundBox;
+
+						if(std::string(object->name).find("Block") != std::string::npos)
+						{
+							groundFixDef.filter.categoryBits = WALL;
+							groundFixDef.filter.maskBits = PLAYER | MONSTER;
+						}
+						else
+						{
+							groundFixDef.filter.categoryBits = TRIGGER;
+							groundFixDef.filter.maskBits = PLAYER;
+						}
+						
+						groundBody->CreateFixture(&groundFixDef);
 					break;
 					}
 					default: throw Failure("Square or polygons in tmx to box2d (render_map), im too lazy for the rest");
