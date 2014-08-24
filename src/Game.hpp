@@ -42,6 +42,8 @@ class Game
 	b2World w;
 	Map map;
 
+	static bool debug;
+
 	private:
 	void anim(ALLEGRO_THREAD*);
 	void input(ALLEGRO_THREAD*);

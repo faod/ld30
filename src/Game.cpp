@@ -2,9 +2,11 @@
 #include "Player.hpp"
 #include "Monster.hpp"
 
-Game::Game(char *mapPath) : m(1280, 720), w(b2Vec2(0.0f, 0.0f)), player(NULL), map(mapPath)
+bool Game::debug = true;
+
+Game::Game(char *mapPath) : m(1280, 720), w(b2Vec2(0.0f, 10.0f)), player(NULL), map(mapPath, w)
 {
-	player = new Player(*this, b2Vec2(1., 4.5));
+	player = new Player(*this, b2Vec2(3., 4.5));
 	characters.push_back(player);
 	characters.push_back(new Monster(*this, b2Vec2(2., 2.)));
 	characters.push_back(new Monster(*this, b2Vec2(3., 1.)));
@@ -93,13 +95,62 @@ void Game::refresh()
  	while (m.loop)
 	{
 		al_wait_for_event(m.refreshEQ, &ev);
-		map.draw(0, 0, m.screen_w, m.screen_h);
+	
+		b2Vec2 pos = getScreenCorner();
+		map.draw(pos.x, pos.y, m.screen_w, m.screen_h);
 
 		for(std::vector<Character*>::const_reverse_iterator it = characters.rbegin(), end = characters.rend() ; it != end; ++it)
 		{
 			(*it)->draw();
 		}
 
+		if(debug)
+		{
+			b2Body* elem = w.GetBodyList();
+			while(elem)
+			{
+				b2Fixture* fixture = elem->GetFixtureList();
+				while(fixture)
+				{
+					b2PolygonShape *polygon = dynamic_cast<b2PolygonShape*>(fixture->GetShape());
+					
+					float x1, x2, y1, y2;
+					b2Vec2 worldc; 
+
+					const b2Vec2 screen = getScreenCorner();
+					int i;
+					for(i=0; i<polygon->GetVertexCount()-1; i++) {
+						
+						worldc = elem->GetWorldPoint(polygon->GetVertex(i));
+						x1 = worldc.x * Game::pixelpm;
+						y1 = worldc.y * Game::pixelpm;
+						
+						worldc = elem->GetWorldPoint(polygon->GetVertex(i + 1));
+						x2 = worldc.x * Game::pixelpm;
+						y2 = worldc.y * Game::pixelpm;
+					
+						al_draw_line(x1 - screen.x, y1 - screen.y, x2 - screen.x, y2 - screen.y, al_map_rgb(0,0,255), 2.);
+					}
+						worldc = elem->GetWorldPoint(polygon->GetVertex(i));
+						x1 = worldc.x * Game::pixelpm;
+						y1 = worldc.y * Game::pixelpm;
+						
+						worldc = elem->GetWorldPoint(polygon->GetVertex(0));
+						x2 = worldc.x * Game::pixelpm;
+						y2 = worldc.y * Game::pixelpm;
+					
+						al_draw_line(x1 - screen.x, y1 - screen.y, x2 - screen.x, y2 - screen.y, al_map_rgb(0,0,255), 2.);
+
+					fixture = fixture->GetNext();
+				}
+					
+
+
+				elem = elem->GetNext();
+			}
+
+		}
+			
 		al_flip_display();
 	}
 }

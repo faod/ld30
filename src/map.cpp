@@ -3,7 +3,10 @@
 #include "map.hpp"
 #include "failure.hpp"
 
+#include "Game.hpp"
+
 #include <Box2D/Box2D.h>
+#include <cassert>
 
 ALLEGRO_COLOR int_to_al_color(int color) {
 	unsigned char r, g, b;
@@ -64,7 +67,7 @@ void render_layer(tmx_map *map, tmx_layer *layer) {
 	}
 }
 
-void render_map(tmx_map *map) {
+void render_map(tmx_map *map, b2World& wo) {
 	ALLEGRO_BITMAP *layer_bmp = NULL;
 	tmx_layer *layers = map->ly_head;
 	unsigned long w, h;
@@ -81,13 +84,68 @@ void render_map(tmx_map *map) {
 			render_layer(map, layers);
 			layers->user_data = layer_bmp;
 		}
+		else if(layers->type == L_OBJGR)
+		{
+			tmx_object *object = layers->content.head;
+			
+			while(object)
+			{
+				switch(object->shape)
+				{	
+					case S_SQUARE:
+					{
+						b2BodyDef groundBodyDef;
+						float width = object->width / static_cast<float>(Game::pixelpm);
+						float height = object->height / static_cast<float>(Game::pixelpm);
+
+						groundBodyDef.position.Set(object->x / static_cast<float>(Game::pixelpm) + width / 2.f, object->y / static_cast<float>(Game::pixelpm) + height / 2.f);
+						
+						b2Body* groundBody = wo.CreateBody(&groundBodyDef);
+
+						b2PolygonShape groundBox;
+
+						groundBox.SetAsBox(width / 2.f, height / 2.f);
+						groundBody->CreateFixture(&groundBox, 0.0f);
+
+					break;
+					}
+					case S_POLYGON:
+					{
+						std::cout << "polygon obj" << std::endl;
+						b2BodyDef groundBodyDef;
+						groundBodyDef.position.Set(object->x / Game::pixelpm, object->y / Game::pixelpm);
+
+						b2Body* groundBody = wo.CreateBody(&groundBodyDef);
+
+						b2PolygonShape groundBox;
+						
+						b2Vec2 *vec = new b2Vec2[object->points_len];
+						for(int i = 0; i < object->points_len; ++i)
+						{
+							vec[i].x = object->points[i][0] / static_cast<float>(Game::pixelpm);
+							vec[i].y = object->points[i][1] / static_cast<float>(Game::pixelpm);
+						}
+						
+						groundBox.Set(vec, object->points_len);
+						assert(groundBox.Validate());
+						groundBody->CreateFixture(&groundBox, 0.0f);
+					break;
+					}
+					default: throw Failure("Square or polygons in tmx to box2d (render_map), im too lazy for the rest");
+					
+
+				}
+
+				object = object->next;
+			}
+		}
 		layers = layers->next;
 	}
 	
 	al_set_target_backbuffer(al_get_current_display());
 }
 
-Map::Map(const char *filename) {
+Map::Map(const char *filename, b2World& wo) : w(wo) {
 	rsc_img_load_func = al_img_loader;
 	rsc_img_free_func = (void (*)(void*))al_destroy_bitmap;
 
@@ -95,7 +153,7 @@ Map::Map(const char *filename) {
 	if (!tmxMap)
 		throw Failure(tmx_strerr());
 
-	render_map(tmxMap);
+	render_map(tmxMap, w);
 }
 
 Map::~Map() {
