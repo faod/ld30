@@ -4,7 +4,7 @@
 
 bool Game::debug = true;
 
-Game::Game(char *mapPath) : m(1280, 720), w(b2Vec2(0.0f, 10.0f)), player(NULL), map(mapPath, w)
+Game::Game(char *mapPath) : m(1280, 720), w(b2Vec2(0.0f, 10.0f)), map(mapPath, w), player(NULL)
 {
 	player = new Player(*this, b2Vec2(3., 4.5));
 	characters.push_back(player);
@@ -35,7 +35,7 @@ void* Game::startRefresh(void *arg)
 	return NULL;
 }
 
-void Game::anim(ALLEGRO_THREAD* t)
+void Game::anim(ALLEGRO_THREAD* )
 {
 	ALLEGRO_EVENT ev;
 
@@ -52,7 +52,7 @@ void Game::anim(ALLEGRO_THREAD* t)
 	}
 }
 
-void Game::input(ALLEGRO_THREAD* t)
+void Game::input(ALLEGRO_THREAD* )
 {
 	ALLEGRO_EVENT ev;
  

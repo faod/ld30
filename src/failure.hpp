@@ -17,4 +17,4 @@ public:
 	const char* what() { return what_s; };
 };
 
-#endif FAIL_H
+#endif /*FAIL_H*/
