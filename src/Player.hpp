@@ -30,6 +30,7 @@ class Player: public Character
 	private:
 	ALLEGRO_BITMAP* bm;
 
+
 	b2BodyDef	bodyDef;
 	b2Body*		body;
 	b2FixtureDef fixtureDef;
@@ -37,6 +38,8 @@ class Player: public Character
 
 	bool left;
 	bool right;
+
+	int life;
 };
 
 #endif
