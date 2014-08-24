@@ -4,6 +4,7 @@
 #include "failure.hpp"
 
 #include "Game.hpp"
+#include "Monster.hpp"
 
 #include <Box2D/Box2D.h>
 #include <cassert>
@@ -100,6 +101,11 @@ void Map::render_map() {
 							playerspawn = object;
 							break;
 						}
+						if(std::string(object->name).find("monsterspawn") != std::string::npos)
+						{
+							monsterspawn.push_back(object);
+							break;
+						}
 						
 						b2BodyDef groundBodyDef;
 						float width = object->width / static_cast<float>(Game::pixelpm);
@@ -125,11 +131,8 @@ void Map::render_map() {
 						{
 							groundFixDef.filter.categoryBits = TRIGGER;
 							groundFixDef.filter.maskBits = PLAYER;
-						}
-
-						if(std::string("finish") == object->name)
-						{
 							groundFixDef.isSensor = true;
+							groundFixDef.userData = object->name;
 						}
 
 						groundBody->CreateFixture(&groundFixDef);
@@ -219,4 +222,18 @@ Player* Map::playerSpawn(Game &g) const
 		throw Failure("spawn not found in tmx map");
 
 	return new Player(g, b2Vec2(playerspawn->x / static_cast<float>(Game::pixelpm), playerspawn->y / static_cast<float>(Game::pixelpm)));	
+}
+
+Monster* Map::monsterSpawn(Game &g) 
+{
+	if(!monsterspawn.empty())
+	{
+		tmx_object *m = monsterspawn.back();
+
+		if(m == NULL)
+			throw Failure("empty monsterspawn :/");
+		monsterspawn.pop_back();
+		return new Monster(g, b2Vec2(m->x / static_cast<float>(Game::pixelpm), m->y / static_cast<float>(Game::pixelpm)));
+	}
+	return NULL;
 }
