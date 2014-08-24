@@ -38,6 +38,7 @@ class Monster : public Character
 	static spAnimationStateData *stateData;
 
 	b2FixtureDef swordDef;
+	b2Fixture* swordFix;
 	int life;
 };
 

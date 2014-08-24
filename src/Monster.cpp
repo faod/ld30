@@ -6,7 +6,7 @@ spAtlas* Monster::modelAtlas = NULL;
 spSkeletonJson* Monster::jsonSkel = NULL;
 spAnimationStateData* Monster::stateData = NULL;
 
-Monster::Monster(Game& g, b2Vec2 p) : Character(g), life(100)
+Monster::Monster(Game& g, b2Vec2 p) : Character(g), swordFix(NULL), life(100)
 {
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(p.x, p.y);
@@ -25,13 +25,15 @@ Monster::Monster(Game& g, b2Vec2 p) : Character(g), life(100)
 	body->CreateFixture(&fixtureDef);
 
 	//sword to kill player
-	dynamicBox.SetAsBox(0.4, 0.22, b2Vec2(0.65, -0.2), 0);
+	dynamicBox.SetAsBox(0.4, 0.25, b2Vec2(0.65, -0.2), 0);
 	swordDef.shape = &dynamicBox;
 	swordDef.isSensor = true;
 	swordDef.density = 0.1;
 	swordDef.filter.categoryBits = SWORD;
 	swordDef.filter.maskBits = PLAYER;
-	(body->CreateFixture(&swordDef))->SetUserData(this);
+	
+	swordFix = body->CreateFixture(&swordDef);
+	swordFix->SetUserData(this);
 
 	// Loads the Spine model
 	ALLEGRO_PATH *path, *resourceDir, *file;
@@ -109,14 +111,30 @@ void Monster::draw() const
 
 void Monster::moveLeft()
 {
+	//animation left
 	model->skeleton->flipX = 1;
 	std::cout << "Monster moved on the left" << std::endl;
+
+	//sword hitbox left
+	body->DestroyFixture(swordFix);
+	dynamicBox.SetAsBox(0.4, 0.25, b2Vec2(-0.65, -0.2), 0);
+	swordDef.shape = &dynamicBox;
+	swordFix = body->CreateFixture(&swordDef);
+	swordFix->SetUserData(this);
 }
 
 void Monster::moveRight()
 {
+	//animation right
 	model->skeleton->flipX = 0;
 	std::cout << "Monster moved on the right" << std::endl;
+
+	//sword hitbox right
+	body->DestroyFixture(swordFix);
+	dynamicBox.SetAsBox(0.4, 0.25, b2Vec2(0.65, -0.2), 0);
+	swordDef.shape = &dynamicBox;
+	swordFix = body->CreateFixture(&swordDef);
+	swordFix->SetUserData(this);
 }
 
 void Monster::jump()
