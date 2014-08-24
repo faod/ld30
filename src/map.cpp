@@ -116,7 +116,7 @@ void Map::render_map() {
 						groundBox.SetAsBox(width / 2.f, height / 2.f);
 						groundFixDef.shape = &groundBox;
 						
-						if(std::string(object->name).find("Block") != std::string::npos)
+						if(std::string(object->name).find("block") != std::string::npos)
 						{
 							groundFixDef.filter.categoryBits = WALL;
 							groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
@@ -157,7 +157,7 @@ void Map::render_map() {
 						assert(groundBox.Validate());
 						groundFixDef.shape = &groundBox;
 
-						if(std::string(object->name).find("Block") != std::string::npos)
+						if(std::string(object->name).find("block") != std::string::npos)
 						{
 							groundFixDef.filter.categoryBits = WALL;
 							groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
