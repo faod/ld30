@@ -27,6 +27,8 @@ Main::Main(int screen_w, int screen_h): loop(true) {
 	al_set_app_name(APP_NAME);
 	al_set_org_name(APP_NAME);
 
+	al_set_new_display_flags(ALLEGRO_OPENGL);
+
 	// Multisampling
 	al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
 	al_set_new_display_option(ALLEGRO_SAMPLES, 4, ALLEGRO_SUGGEST); // 4x

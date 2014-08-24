@@ -59,7 +59,7 @@ class Game
 	std::vector<Character*> characters; //all the characters list
 	Player* player;						//quick reference to the special character player
 
-	ALLEGRO_BITMAP *tmp;
+	//ALLEGRO_BITMAP *tmp;
 };
 
 #endif
