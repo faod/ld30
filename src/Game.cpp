@@ -2,6 +2,8 @@
 #include "Player.hpp"
 #include "Monster.hpp"
 
+#include "failure.hpp"
+
 bool Game::debug = true;
 
 Game::Game(char *mapPath) : m(1280, 720), w(b2Vec2(0.0f, 10.0f)), map(mapPath, w), player(NULL)
@@ -10,9 +12,12 @@ Game::Game(char *mapPath) : m(1280, 720), w(b2Vec2(0.0f, 10.0f)), map(mapPath, w
 	player = map.playerSpawn(*this);
 	characters.push_back(player);
 
-	Monster* m;
-	while((m = map.monsterSpawn(*this)) != NULL)
-		characters.push_back(m);
+	Monster* monster;
+	while((monster = map.monsterSpawn(*this)) != NULL)
+		characters.push_back(monster);
+
+	tmp = al_create_bitmap(m.screen_w, m.screen_h);
+	if (!tmp) throw Failure("Game::Game(): Failed to create bitmap!");
 }
 Game::~Game()
 {
@@ -100,7 +105,10 @@ void Game::refresh()
 		al_wait_for_event(m.refreshEQ, &ev);
 	
 		b2Vec2 pos = getScreenCorner();
+		al_set_target_bitmap(tmp);
 		map.draw(pos.x, pos.y, m.screen_w, m.screen_h);
+		al_set_target_backbuffer(al_get_current_display());
+		al_draw_bitmap(tmp, 0., 0., 0);
 
 		for(std::vector<Character*>::const_reverse_iterator it = characters.rbegin(), end = characters.rend() ; it != end; ++it)
 		{
