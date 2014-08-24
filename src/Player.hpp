@@ -22,6 +22,7 @@ class Player: public Character
 	virtual void jump();
 	virtual void stopLeft();
 	virtual void stopRight();
+	virtual void damage(int qt);
 
 	b2Vec2 getCenter() const; 
 
