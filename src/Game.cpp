@@ -4,7 +4,21 @@
 
 #include "failure.hpp"
 
+#include <algorithm>
+
 bool Game::debug = true;
+
+struct IsDead
+{
+	bool operator()(Character* c)
+	{
+		bool ret =  c == NULL || c->dead();
+		if (ret && c)
+			delete c;
+		return ret;
+	}
+};
+
 
 Game::Game(char *mapPath) : m(1280, 720), w(b2Vec2(0.0f, 10.0f)), map(mapPath, w), player(NULL)
 {
@@ -60,28 +74,12 @@ void Game::anim(ALLEGRO_THREAD* )
 			(*it)->tick();
 		}
 
-		for(std::vector<Character*>::iterator it = characters.begin(), end = characters.end(); it != end; ++it)
-		{	
-			if((*it)->dead())
-			{
-				if(*it != player)
-				{
-					std::cout << "characters.size " << characters.size() << std::endl;
-					delete (*it);
-					*it = NULL;
-					characters.erase(it);
-					it = characters.begin();
-					std::cout << "characters.size " << characters.size() << std::endl;
-				}
-				else
-				{
-					//TODO when we die
-				}
-			}
-		}
+		IsDead d;
+		std::vector<Character*>::iterator del;
+		if((del = std::remove_if(characters.begin(), characters.end(), d)) != characters.end())
+			characters.erase(del, characters.end());
 	}
 }
-
 void Game::input(ALLEGRO_THREAD* )
 {
 	ALLEGRO_EVENT ev;
@@ -137,6 +135,7 @@ void Game::refresh()
 		{
 			(*it)->draw();
 		}
+
 
 		if(debug)
 		{
