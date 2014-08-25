@@ -45,7 +45,8 @@ class Player: public Character
 	b2Body*		body;
 	b2FixtureDef fixtureDef;
 	b2FixtureDef swordDef;
-	
+	b2Fixture*  swordFix;
+
 	b2PolygonShape dynamicBox;
 
 	// Spine

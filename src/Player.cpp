@@ -11,7 +11,7 @@ spSkeletonJson* Player::jsonSkel = NULL;
 spAnimationStateData* Player::stateData = NULL;
 spSkeletonData*   Player::modelData = NULL;
 
-Player::Player(Game& g, b2Vec2 p) : Character(g), left(false), right(false), landed(true), contact(false), lastproc(0), life(100), attacking(false), attackcooldown(0)
+Player::Player(Game& g, b2Vec2 p) : Character(g),swordFix(NULL), left(false), right(false), landed(true), contact(false), lastproc(0), life(100), attacking(false), attackcooldown(0)
 {
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(p.x, p.y);
@@ -45,7 +45,6 @@ Player::Player(Game& g, b2Vec2 p) : Character(g), left(false), right(false), lan
 	swordDef.density = 0.1;
 	swordDef.filter.categoryBits = SWORD;
 	swordDef.filter.maskBits = MONSTER;
-	(body->CreateFixture(&swordDef))->SetUserData(this);
 
 	// Loads the Spine model
 	ALLEGRO_PATH *path, *resourceDir, *file;
@@ -124,7 +123,17 @@ void Player::tick()
 
 	}
 
-	//sword side TO UPDATE TO FIT SPINE SIDE
+	if(attacking)
+	{
+		if(attackcooldown == 0)
+		{
+			attacking = false;
+			spAnimationState_setAnimationByName(model->state, 0, (right | left) ? "walk" : "rest",  true);
+			if(swordFix)
+				body->DestroyFixture(swordFix);
+		}
+		attackcooldown--;
+	}
 
 }
 
@@ -167,13 +176,19 @@ void Player::moveLeft()
 {
 		left = true;
 		if(!right)
+		{
 			model->skeleton->flipX = 1;
+			spAnimationState_setAnimationByName(model->state, 0, "walk",  true);
+		}
 }
 
 void Player::moveRight()
 {	
 		right = true;
 		model->skeleton->flipX = 0;
+
+		if(!left)		
+			spAnimationState_setAnimationByName(model->state, 0, "walk",  true);
 }
 
 void Player::jump()
@@ -185,10 +200,16 @@ void Player::jump()
 void Player::stopLeft()
 {
 	left = false;
+	if(!right)
+		spAnimationState_setAnimationByName(model->state, 0, "rest",  true);
 }
 void Player::stopRight()
 {
 	right = false;
+	if(!left)
+		spAnimationState_setAnimationByName(model->state, 0, "rest",  true);
+	if(left)
+		model->skeleton->flipX = 1;
 }
 
 b2Vec2 Player::getCenter() const
@@ -245,9 +266,16 @@ void Player::attack(Character& c)
 
 void Player::onAttack()
 {	
-	if(attackcooldown == 0)
+	if(!attacking)
 	{
 		attacking = true;
 		attackcooldown = 50;
+		spAnimationState_setAnimationByName(model->state, 0, "slash",  false);
+
+	
+		dynamicBox.SetAsBox(1, 0.3, b2Vec2(0, -.3), 0);
+		swordDef.shape = &dynamicBox;
+		swordFix = body->CreateFixture(&swordDef);
+		swordFix->SetUserData(this);
 	}
 }
