@@ -57,6 +57,8 @@ class Game
 	void input(ALLEGRO_THREAD*);
 	void refresh();
 
+	b2Vec2 screenCorner;
+
 	ContactListener listener;
 	std::vector<Character*> characters; //all the characters list
 	Player* player;						//quick reference to the special character player
