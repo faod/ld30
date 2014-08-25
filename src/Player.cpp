@@ -49,6 +49,7 @@ Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64)), 
 Player::~Player()
 {
 	al_destroy_bitmap(bm);
+	g.w.DestroyBody(body);
 }
 
 void Player::tick()
