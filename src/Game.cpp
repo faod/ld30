@@ -134,14 +134,14 @@ void Game::refresh()
 		{
 			b2Vec2 pos = getScreenCorner();
 			map.draw(pos.x, pos.y, m.screen_w, m.screen_h);
-		}
+		
 
 		for(std::vector<Character*>::const_reverse_iterator it = characters.rbegin(), end = characters.rend() ; it != end; ++it)
 		{
 			if(*it)
 				(*it)->draw();
 		}
-
+		}
 
 		if(debug && player)
 		{
