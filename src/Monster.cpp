@@ -5,6 +5,7 @@
 spAtlas* Monster::modelAtlas = NULL;
 spSkeletonJson* Monster::jsonSkel = NULL;
 spAnimationStateData* Monster::stateData = NULL;
+spSkeletonData*   Monster::modelData = NULL;
 
 Monster::Monster(Game& g, b2Vec2 p) : Character(g), swordFix(NULL),right(true), resting(true), attacking(false), life(100)
 {
@@ -53,8 +54,11 @@ Monster::Monster(Game& g, b2Vec2 p) : Character(g), swordFix(NULL),right(true), 
 	file = al_create_path("data/animations/skeleton.json");
 	path =  al_clone_path(resourceDir);
 	al_join_paths(path, file); al_destroy_path(file);
-	modelData = spSkeletonJson_readSkeletonDataFile(jsonSkel, al_path_cstr(path, '/'));
-	if (!modelData) throw Failure("Failed to load the monster's data.");
+	if(!modelData)
+	{
+		modelData = spSkeletonJson_readSkeletonDataFile(jsonSkel, al_path_cstr(path, '/'));
+		if (!modelData) throw Failure("Failed to load the monster's data.");
+	}
 	al_destroy_path(path); al_destroy_path(resourceDir);
 
 	if(stateData == NULL)
@@ -76,7 +80,6 @@ Monster::Monster(Game& g, b2Vec2 p) : Character(g), swordFix(NULL),right(true), 
 
 Monster::~Monster()
 {
-	spSkeletonData_dispose(modelData);
 	disposeSkeleton(model);
 	g.w.DestroyBody(body);
 }

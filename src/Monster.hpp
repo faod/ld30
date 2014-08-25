@@ -40,8 +40,8 @@ class Monster : public Character
 
 	// Spine
 	SkeletonDrawable *model;
-	spSkeletonData   *modelData;
-
+	
+	static spSkeletonData   *modelData;
 	static spAtlas *modelAtlas;
 	static spSkeletonJson *jsonSkel;
 	static spAnimationStateData *stateData;
