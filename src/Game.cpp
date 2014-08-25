@@ -25,10 +25,11 @@ struct IsDead
 };
 
 
-Game::Game(char *mapPath) : m(1280, 720), w(b2Vec2(0.0f, 10.0f)), map(mapPath, w), player(NULL), screenCorner(0,0)
+Game::Game(char *mapPath) : m(1280, 720), w(b2Vec2(0.0f, 10.0f)), map(mapPath, w),  screenCorner(0,0), playerCenter(0,0),  player(NULL)
 {
 	w.SetContactListener(&listener);
 	player = map.playerSpawn(*this);
+	playerCenter = player->getCenter();
 	characters.push_back(player);
 
 	Monster* monster;
@@ -83,7 +84,10 @@ void Game::anim(ALLEGRO_THREAD* )
 		}
 
 		if (player)
-			screenCorner.Set(player->getCenter().x * pixelpm - al_get_display_width(m.display) / 2, player->getCenter().y * pixelpm - al_get_display_height(m.display) /2);
+		{
+			playerCenter = player->getCenter();
+			screenCorner.Set(playerCenter.x * pixelpm - al_get_display_width(m.display) / 2, playerCenter.y * pixelpm - al_get_display_height(m.display) /2);
+		}
 
 		IsDead d;
 		d.p = reinterpret_cast<Character**>(&player);
@@ -246,4 +250,8 @@ void Game::finish()
 b2Vec2 Game::getScreenCorner() const
 {
 	return screenCorner;
+}
+b2Vec2 Game::getPlayerCenter() const
+{
+	return playerCenter;
 }

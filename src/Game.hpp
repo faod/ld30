@@ -45,7 +45,10 @@ class Game
 
 	//RETURNS COORD IN PIXEL
 	b2Vec2 getScreenCorner() const;
-
+	
+	//player world center in meters
+	b2Vec2 getPlayerCenter() const;
+	
 	Main m;
 	b2World w;
 	Map map;
@@ -58,6 +61,7 @@ class Game
 	void refresh();
 
 	b2Vec2 screenCorner;
+	b2Vec2 playerCenter;
 
 	ContactListener listener;
 	std::vector<Character*> characters; //all the characters list
