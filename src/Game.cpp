@@ -10,7 +10,7 @@ bool Game::debug = true;
 
 struct IsDead
 {
-	bool operator()(Character* c)
+	bool operator()(Character* &c)
 	{
 		bool ret =  c == NULL || c->dead();
 		if (ret && c)
