@@ -89,7 +89,15 @@ void Map::render_map() {
 		else if(layers->type == L_OBJGR)
 		{
 			tmx_object *object = layers->content.head;
-			
+			processObjects(object);
+		}
+		layers = layers->next;
+	}
+	al_set_new_bitmap_flags(0);
+	al_set_target_backbuffer(al_get_current_display());
+}
+void Map::processObjects(tmx_object* object)
+{
 			while(object)
 			{
 				switch(object->shape)
@@ -181,11 +189,7 @@ void Map::render_map() {
 
 				object = object->next;
 			}
-		}
-		layers = layers->next;
-	}
-	al_set_new_bitmap_flags(0);
-	al_set_target_backbuffer(al_get_current_display());
+
 }
 
 Map::Map(const char *filename, b2World& w) : wo(w), playerspawn(NULL)  {

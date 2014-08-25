@@ -18,6 +18,7 @@ class Map {
 	std::vector<tmx_object*> monsterspawn;
 
 	void render_map();
+	void processObjects(tmx_object*);
 public:
 	Map(const char *filename, b2World& w);
 	~Map();
