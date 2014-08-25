@@ -3,6 +3,7 @@
 #include "Game.hpp"
 #include "failure.hpp"
 
+#include <string>
 
 static void onFootWall(b2Fixture* foot, b2Fixture* /*wall*/)
 {
