@@ -1,8 +1,15 @@
 #include "Player.hpp"
 #include "Game.hpp"
+#include "failure.hpp"
 
 #include <string>
 #include <cstdlib>
+
+SkeletonDrawable* Player::model = NULL;
+spAtlas* Player::modelAtlas = NULL;
+spSkeletonJson* Player::jsonSkel = NULL;
+spAnimationStateData* Player::stateData = NULL;
+spSkeletonData*   Player::modelData = NULL;
 
 Player::Player(Game& g, b2Vec2 p) : Character(g), left(false), right(false), landed(true), contact(false), lastproc(0), life(100), attacking(false), attackcooldown(0)
 {
@@ -39,6 +46,41 @@ Player::Player(Game& g, b2Vec2 p) : Character(g), left(false), right(false), lan
 	swordDef.filter.categoryBits = SWORD;
 	swordDef.filter.maskBits = MONSTER;
 	(body->CreateFixture(&swordDef))->SetUserData(this);
+
+	// Loads the Spine model
+	ALLEGRO_PATH *path, *resourceDir, *file;
+	resourceDir= al_get_standard_path(ALLEGRO_RESOURCES_PATH);
+	std::cerr << al_path_cstr(resourceDir, '/') << std::endl;
+
+	if (modelAtlas == NULL) {
+		file = al_create_path("data/animations/hero.atlas");
+		path =  al_clone_path(resourceDir);
+		al_join_paths(path, file); al_destroy_path(file);
+		modelAtlas = spAtlas_createFromFile(al_path_cstr(path, '/'), NULL);
+		if (!modelAtlas) throw Failure("Failed to load the hero's atlas.");
+		al_destroy_path(path);
+		jsonSkel = spSkeletonJson_create(modelAtlas);
+
+		file = al_create_path("data/animations/hero.json");
+		path =  al_clone_path(resourceDir);
+		al_join_paths(path, file); al_destroy_path(file);
+		modelData = spSkeletonJson_readSkeletonDataFile(jsonSkel, al_path_cstr(path, '/'));
+		if (!modelData) throw Failure("Failed to load the hero's data.");
+		al_destroy_path(path); al_destroy_path(resourceDir);
+
+		stateData = spAnimationStateData_create(modelData);
+		spAnimationStateData_setMixByName(stateData, "walk", "rest", 0.2f);
+		spAnimationStateData_setMixByName(stateData, "rest", "walk", 0.2f);
+		spAnimationStateData_setMixByName(stateData, "rest", "slash", 0.1f);
+		spAnimationStateData_setMixByName(stateData, "slash", "rest", 0.1f);
+		spAnimationStateData_setMixByName(stateData, "walk", "slash", 0.1f);
+		spAnimationStateData_setMixByName(stateData, "slash", "walk", 0.1f);
+	
+		model = loadSkeleton(modelData, stateData);
+		if (!model) throw Failure("Failed to load the hero's skeleton.");
+
+		spAnimationState_setAnimationByName(model->state, 0, "rest",  true);
+	}
 }
 
 Player::~Player()
@@ -49,6 +91,8 @@ Player::~Player()
 
 void Player::tick()
 {
+	skeletonUpdate(model, 1 / (float) g.m.animation_tick);
+
 	//Velocity update
 	float needvel;
 	if(right && landed)
@@ -88,7 +132,11 @@ void Player::tick()
 
 void Player::draw() const
 {
-	//al_draw_filled_rectangle(g.m.screen_w/2 - 16, g.m.screen_h/2 - 32, g.m.screen_w/2 + 16, g.m.screen_h/2 + 32, al_map_rgb(255, 0, 0));
+	const b2Vec2 screen = g.getScreenCorner();
+	model->skeleton->x = (body->GetPosition().x) * g.pixelpm - screen.x;
+	model->skeleton->y = (body->GetPosition().y + .9)  * g.pixelpm - screen.y;
+
+	skeletonDraw(model);
 	
 	//hp bar
 	al_draw_rectangle(al_get_display_width(g.m.display) / 2 - 102,
