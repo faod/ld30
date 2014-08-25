@@ -10,11 +10,16 @@ bool Game::debug = true;
 
 struct IsDead
 {
+	Character** p;
 	bool operator()(Character* &c)
 	{
 		bool ret =  c == NULL || c->dead();
 		if (ret && c)
+		{
+			if(*p == c)
+				*p = NULL;
 			delete c;
+		}
 		return ret;
 	}
 };
@@ -75,12 +80,10 @@ void Game::anim(ALLEGRO_THREAD* )
 		}
 
 		IsDead d;
+		d.p = reinterpret_cast<Character**>(&player);
 		std::vector<Character*>::iterator del;
 		if((del = std::remove_if(characters.begin(), characters.end(), d)) != characters.end())
 		{
-			for(std::vector<Character*>::iterator it = del, end = characters.end(); it != end; ++it)
-				if(*it == player)
-					player = NULL;
 			characters.erase(del, characters.end());
 		}
 	}
