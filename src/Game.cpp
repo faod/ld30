@@ -128,12 +128,12 @@ void Game::refresh()
  	while (m.loop)
 	{
 		al_wait_for_event(m.refreshEQ, &ev);
-	
-		b2Vec2 pos = getScreenCorner();
-		//al_set_target_bitmap(tmp);
-		map.draw(pos.x, pos.y, m.screen_w, m.screen_h);
-		//al_set_target_backbuffer(al_get_current_display());
-		//al_draw_bitmap(tmp, 0., 0., 0);
+
+		if(player)
+		{
+			b2Vec2 pos = getScreenCorner();
+			map.draw(pos.x, pos.y, m.screen_w, m.screen_h);
+		}
 
 		for(std::vector<Character*>::const_reverse_iterator it = characters.rbegin(), end = characters.rend() ; it != end; ++it)
 		{
