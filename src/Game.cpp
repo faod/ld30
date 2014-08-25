@@ -77,7 +77,12 @@ void Game::anim(ALLEGRO_THREAD* )
 		IsDead d;
 		std::vector<Character*>::iterator del;
 		if((del = std::remove_if(characters.begin(), characters.end(), d)) != characters.end())
+		{
+			for(std::vector<Character*>::iterator it = del, end = characters.end(); it != end; ++it)
+				if(*it == player)
+					player = NULL;
 			characters.erase(del, characters.end());
+		}
 	}
 }
 void Game::input(ALLEGRO_THREAD* )
@@ -132,11 +137,12 @@ void Game::refresh()
 
 		for(std::vector<Character*>::const_reverse_iterator it = characters.rbegin(), end = characters.rend() ; it != end; ++it)
 		{
-			(*it)->draw();
+			if(*it)
+				(*it)->draw();
 		}
 
 
-		if(debug)
+		if(debug && player)
 		{
 			b2Body* elem = w.GetBodyList();
 			while(elem)

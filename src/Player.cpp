@@ -50,6 +50,7 @@ Player::~Player()
 {
 	al_destroy_bitmap(bm);
 	g.w.DestroyBody(body);
+	body = NULL;
 }
 
 void Player::tick()
