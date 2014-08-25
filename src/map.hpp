@@ -26,6 +26,7 @@ class Map {
 	void split_map(ALLEGRO_BITMAP *map);
 
 	void render_map();
+	void processObjects(tmx_object*);
 public:
 	Map(const char *filename, b2World& w);
 	~Map();

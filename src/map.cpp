@@ -121,103 +121,104 @@ void Map::render_map() {
 		else if(layers->type == L_OBJGR)
 		{
 			tmx_object *object = layers->content.head;
-			
-			while(object)
-			{
-				switch(object->shape)
-				{	
-					case S_SQUARE:
-					{
-						if(std::string("spawn") == object->name)
-						{
-							playerspawn = object;
-							break;
-						}
-						if(std::string(object->name).find("monsterspawn") != std::string::npos)
-						{
-							monsterspawn.push_back(object);
-							break;
-						}
-						
-						b2BodyDef groundBodyDef;
-						float width = object->width / static_cast<float>(Game::pixelpm);
-						float height = object->height / static_cast<float>(Game::pixelpm);
-
-						groundBodyDef.position.Set(object->x / static_cast<float>(Game::pixelpm) + width / 2.f, object->y / static_cast<float>(Game::pixelpm) + height / 2.f);
-						
-						b2Body* groundBody = wo.CreateBody(&groundBodyDef);
-
-						b2PolygonShape groundBox;
-						b2FixtureDef   groundFixDef;
-						
-
-						groundBox.SetAsBox(width / 2.f, height / 2.f);
-						groundFixDef.shape = &groundBox;
-						
-						if(std::string(object->name).find("block") != std::string::npos)
-						{
-							groundFixDef.filter.categoryBits = WALL;
-							groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
-						}
-						else
-						{
-							groundFixDef.filter.categoryBits = TRIGGER;
-							groundFixDef.filter.maskBits = PLAYER;
-							groundFixDef.isSensor = true;
-							groundFixDef.userData = object->name;
-						}
-
-						groundBody->CreateFixture(&groundFixDef);
-
-					break;
-					}
-					case S_POLYGON:
-					{
-						b2BodyDef groundBodyDef;
-						groundBodyDef.position.Set(object->x / Game::pixelpm, object->y / Game::pixelpm);
-
-						b2Body* groundBody = wo.CreateBody(&groundBodyDef);
-
-						b2PolygonShape groundBox;
-						b2FixtureDef groundFixDef;
-
-						b2Vec2 *vec = new b2Vec2[object->points_len];
-						for(int i = 0; i < object->points_len; ++i)
-						{
-							vec[i].x = object->points[i][0] / static_cast<float>(Game::pixelpm);
-							vec[i].y = object->points[i][1] / static_cast<float>(Game::pixelpm);
-						}
-						
-						groundBox.Set(vec, object->points_len);
-						assert(groundBox.Validate());
-						groundFixDef.shape = &groundBox;
-
-						if(std::string(object->name).find("block") != std::string::npos)
-						{
-							groundFixDef.filter.categoryBits = WALL;
-							groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
-						}
-						else
-						{
-							groundFixDef.filter.categoryBits = TRIGGER;
-							groundFixDef.filter.maskBits = PLAYER;
-						}
-						
-						groundBody->CreateFixture(&groundFixDef);
-					break;
-					}
-					default: throw Failure("Square or polygons in tmx to box2d (render_map), im too lazy for the rest");
-					
-
-				}
-
-				object = object->next;
-			}
+			processObjects(object);
 		}
 		layers = layers->next;
 	}
-	
+	al_set_new_bitmap_flags(0);
 	al_set_target_backbuffer(al_get_current_display());
+}
+
+void Map::processObjects(tmx_object* object)
+{
+	while(object)
+	{
+		switch(object->shape)
+		{	
+			case S_SQUARE:
+			{
+				if(std::string("spawn") == object->name)
+				{
+					playerspawn = object;
+					break;
+				}
+				if(std::string(object->name).find("monsterspawn") != std::string::npos)
+				{
+					monsterspawn.push_back(object);
+					break;
+				}
+						
+				b2BodyDef groundBodyDef;
+				float width = object->width / static_cast<float>(Game::pixelpm);
+				float height = object->height / static_cast<float>(Game::pixelpm);
+
+				groundBodyDef.position.Set(object->x / static_cast<float>(Game::pixelpm) + width / 2.f, object->y / static_cast<float>(Game::pixelpm) + height / 2.f);
+						
+				b2Body* groundBody = wo.CreateBody(&groundBodyDef);
+
+				b2PolygonShape groundBox;
+				b2FixtureDef   groundFixDef;
+						
+
+				groundBox.SetAsBox(width / 2.f, height / 2.f);
+				groundFixDef.shape = &groundBox;
+						
+				if(std::string(object->name).find("block") != std::string::npos)
+				{
+					groundFixDef.filter.categoryBits = WALL;
+					groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
+				}
+				else
+				{
+					groundFixDef.filter.categoryBits = TRIGGER;
+					groundFixDef.filter.maskBits = PLAYER;
+					groundFixDef.isSensor = true;
+					groundFixDef.userData = object->name;
+				}
+
+				groundBody->CreateFixture(&groundFixDef);
+
+			break;
+			}
+			case S_POLYGON:
+			{
+				b2BodyDef groundBodyDef;
+				groundBodyDef.position.Set(object->x / Game::pixelpm, object->y / Game::pixelpm);
+
+				b2Body* groundBody = wo.CreateBody(&groundBodyDef);
+
+				b2PolygonShape groundBox;
+				b2FixtureDef groundFixDef;
+
+				b2Vec2 *vec = new b2Vec2[object->points_len];
+				for(int i = 0; i < object->points_len; ++i)
+				{
+					vec[i].x = object->points[i][0] / static_cast<float>(Game::pixelpm);
+					vec[i].y = object->points[i][1] / static_cast<float>(Game::pixelpm);
+				}
+						
+				groundBox.Set(vec, object->points_len);
+				assert(groundBox.Validate());
+				groundFixDef.shape = &groundBox;
+
+				if(std::string(object->name).find("block") != std::string::npos)
+				{
+					groundFixDef.filter.categoryBits = WALL;
+					groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
+				}
+				else
+				{
+					groundFixDef.filter.categoryBits = TRIGGER;
+					groundFixDef.filter.maskBits = PLAYER;
+				}
+						
+				groundBody->CreateFixture(&groundFixDef);
+			break;
+			}
+			default: throw Failure("Square or polygons in tmx to box2d (render_map), im too lazy for the rest");
+		}
+		object = object->next;
+	}
 }
 
 Map::Map(const char *filename, b2World& w) : wo(w), playerspawn(NULL)  {

@@ -107,6 +107,15 @@ void Player::draw() const
 							 al_get_display_height(g.m.display) - 40,
 							 al_map_rgb(255, 0, 0));
 
+	if(Game::debug)
+	{
+		if(landed)
+			al_draw_filled_circle(al_get_display_width(g.m.display) / 2 + 120,
+							      al_get_display_height(g.m.display) - 50,
+							      10,
+							      al_map_rgb(0, 255, 0));
+	}
+
 }
 
 
