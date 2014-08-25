@@ -29,6 +29,8 @@ class Player: public Character
 	virtual bool dead() const;
 	virtual void attack(Character& c);
 
+	void onAttack();
+
 	void onMonsterContact();
 	void onMonsterSeparation();
 
@@ -53,6 +55,8 @@ class Player: public Character
 	int lastproc;
 
 	int life;
+	bool attacking;
+	int attackcooldown;
 };
 
 #endif

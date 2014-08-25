@@ -4,7 +4,7 @@
 #include <string>
 #include <cstdlib>
 
-Player::Player(Game& g, b2Vec2 p) : Character(g), left(false), right(false), landed(true), contact(false), lastproc(0), life(100)
+Player::Player(Game& g, b2Vec2 p) : Character(g), left(false), right(false), landed(true), contact(false), lastproc(0), life(100), attacking(false), attackcooldown(0)
 {
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(p.x, p.y);
@@ -190,4 +190,13 @@ bool Player::dead() const
 void Player::attack(Character& c)
 {
 	c.damage(60);
+}
+
+void Player::onAttack()
+{	
+	if(attackcooldown == 0)
+	{
+		attacking = true;
+		attackcooldown = 50;
+	}
 }
