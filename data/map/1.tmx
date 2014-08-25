@@ -27,11 +27,9 @@
   <object name="block" x="4736" y="768">
    <polygon points="0,0 512,0 640,-128 0,-128"/>
   </object>
-  <object name="kill" x="5248" y="1152" width="384" height="128"/>
   <object name="block" x="4736" y="1152" width="512" height="128"/>
   <object name="secret" x="4864" y="1024" width="128" height="128"/>
   <object name="block" x="5632" y="1152" width="128" height="128"/>
-  <object name="kill" x="5760" y="1152" width="384" height="128"/>
   <object name="kill" x="7552" y="1152" width="512" height="128"/>
   <object name="block" x="8064" y="1024" width="256" height="256"/>
   <object name="block" x="8192" y="896" width="256" height="128"/>
@@ -49,6 +47,8 @@
   <object name="block" x="10624" y="1024">
    <polygon points="0,0 128,128 2176,128 2176,0"/>
   </object>
-  <object name="finish" x="12672" y="512" width="128" height="512"/>
+  <object name="block" x="12672" y="512" width="128" height="512"/>
+  <object name="kill" x="5244" y="1220" width="958" height="60"/>
+  <object name="finish" x="12544" y="896" width="128" height="128"/>
  </objectgroup>
 </map>

@@ -49,13 +49,13 @@ Player::Player(Game& g, b2Vec2 p) : Character(g),swordFix(NULL), left(false), ri
 	// Loads the Spine model
 	ALLEGRO_PATH *path, *resourceDir, *file;
 	resourceDir= al_get_standard_path(ALLEGRO_RESOURCES_PATH);
-	std::cerr << al_path_cstr(resourceDir, '/') << std::endl;
+	std::cerr << al_path_cstr(resourceDir, ALLEGRO_NATIVE_PATH_SEP) << std::endl;
 
 	if (modelAtlas == NULL) {
 		file = al_create_path("data/animations/hero.atlas");
 		path =  al_clone_path(resourceDir);
 		al_join_paths(path, file); al_destroy_path(file);
-		modelAtlas = spAtlas_createFromFile(al_path_cstr(path, '/'), NULL);
+		modelAtlas = spAtlas_createFromFile(al_path_cstr(path, ALLEGRO_NATIVE_PATH_SEP), NULL);
 		if (!modelAtlas) throw Failure("Failed to load the hero's atlas.");
 		al_destroy_path(path);
 		jsonSkel = spSkeletonJson_create(modelAtlas);
@@ -63,7 +63,7 @@ Player::Player(Game& g, b2Vec2 p) : Character(g),swordFix(NULL), left(false), ri
 		file = al_create_path("data/animations/hero.json");
 		path =  al_clone_path(resourceDir);
 		al_join_paths(path, file); al_destroy_path(file);
-		modelData = spSkeletonJson_readSkeletonDataFile(jsonSkel, al_path_cstr(path, '/'));
+		modelData = spSkeletonJson_readSkeletonDataFile(jsonSkel, al_path_cstr(path, ALLEGRO_NATIVE_PATH_SEP));
 		if (!modelData) throw Failure("Failed to load the hero's data.");
 		al_destroy_path(path); al_destroy_path(resourceDir);
 

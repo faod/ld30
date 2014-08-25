@@ -12,6 +12,9 @@
 
 #define BMP_MS 2048
 
+const char* Map::levelNames[] = {"1", "2"};
+const int   Map::levelCount = 2;
+
 ALLEGRO_COLOR int_to_al_color(int color) {
 	unsigned char r, g, b;
 	
@@ -81,6 +84,7 @@ void Map::split_map(ALLEGRO_BITMAP *map) {
 	bmp = new ALLEGRO_BITMAP*[bmp_count];
 	if (!bmp) throw Failure("Map::split_map(): failed to allocate array of bitmaps!");
 
+	al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP);
 	for (int i=0; i<bmp_count; i++) {
 		bmp[i] = al_create_bitmap(BMP_MS, BMP_MS);
 		if (!bmp[i]) throw Failure("Map::split_map(): failed to create bitmap!");
@@ -117,6 +121,7 @@ void Map::render_map() {
 
 			render_layer(tmxMap, layers);
 			split_map(layer_bmp);
+			al_destroy_bitmap(layer_bmp);
 		}
 		else if(layers->type == L_OBJGR)
 		{
@@ -223,11 +228,18 @@ void Map::processObjects(tmx_object* object)
 	}
 }
 
-Map::Map(const char *filename, b2World& w) : wo(w), playerspawn(NULL)  {
+Map::Map(const char *levelName, b2World& w) : wo(w), playerspawn(NULL)  {
 	rsc_img_load_func = al_img_loader;
 	rsc_img_free_func = (void (*)(void*))al_destroy_bitmap;
 
-	tmxMap = tmx_load(filename);
+	ALLEGRO_PATH *file = al_create_path("data/map/");
+	ALLEGRO_PATH *path = al_get_standard_path(ALLEGRO_RESOURCES_PATH);
+	al_join_paths(path, file); al_destroy_path(file);
+	al_set_path_filename(path, levelName);
+	al_set_path_extension(path, ".tmx");
+
+	tmxMap = tmx_load(al_path_cstr(path, ALLEGRO_NATIVE_PATH_SEP));
+	al_destroy_path(path);
 	if (!tmxMap)
 		throw Failure(tmx_strerr());
 

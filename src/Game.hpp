@@ -31,7 +31,7 @@ class Game
 {
 	public:
 	
-	Game(char *mapPath);
+	Game();
 	~Game();
 
 	static const int pixelpm = 128; 
@@ -51,7 +51,7 @@ class Game
 	
 	Main m;
 	b2World w;
-	Map map;
+	Map *map;
 
 	static bool debug;
 
@@ -60,6 +60,9 @@ class Game
 	void input(ALLEGRO_THREAD*);
 	void refresh();
 
+	bool inMenu;
+	void menuRefresh();
+
 	b2Vec2 screenCorner;
 	b2Vec2 playerCenter;
 
@@ -67,7 +70,8 @@ class Game
 	std::vector<Character*> characters; //all the characters list
 	Player* player;						//quick reference to the special character player
 
-	//ALLEGRO_BITMAP *tmp;
+	int mapToLoad;
+	void loadMap();
 };
 
 #endif

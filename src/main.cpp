@@ -20,7 +20,7 @@ Main::Main(int screen_w, int screen_h): loop(true) {
 	this->screen_w = screen_w;
 
 	//refresh_tick = 30;
-	animation_tick = 60;
+	animation_tick = 30;
 
 	if (!al_init()) throw Failure("failed to initialize allegro!");
 
@@ -98,14 +98,8 @@ Main::~Main() {
 
 /** OpenGL 3.3+ modern **/
 int main(int argc, char *argv[]) {
-	if (argc != 2)
-	{
-		cerr << "This program requires 1 argument: the path to a map." << endl;
-		return 1;
-	}
-
 	try {
-		Game g(argv[1]);
+		Game g;
 	
 		ALLEGRO_THREAD* input = al_create_thread(Game::startInput, &g);
 		if(input)

@@ -34,6 +34,9 @@ public:
 
 	Player* playerSpawn(Game &g) const;
 	Monster* monsterSpawn(Game &g);
+
+	static const char *levelNames[];
+	static const int   levelCount;
 };
 
 #endif /* MAP_H */

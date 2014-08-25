@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="15" height="10" tilewidth="128" tileheight="128" backgroundcolor="#804d50">
+ <tileset firstgid="1" source="../tilesets/castle.tsx"/>
+ <layer name="Calque de Tile 1" width="15" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgF9ACsZOpjBGJuMvWyQ/UKALEgCVgISS+59gIAa7QBGg==
+  </data>
+ </layer>
+ <objectgroup name="Physics" width="15" height="10">
+  <object name="block" x="0" y="0" width="128" height="1280"/>
+  <object name="block" x="1792" y="0" width="128" height="1280"/>
+  <object name="block" x="56" y="1092" width="1784" height="60"/>
+  <object name="monsterspawn" x="512" y="896" width="128" height="128"/>
+  <object name="monsterspawn" x="768" y="896" width="128" height="128"/>
+  <object name="monsterspawn" x="1024" y="896" width="128" height="128"/>
+  <object name="monsterspawn" x="1280" y="896" width="128" height="128"/>
+  <object name="spawn" x="1536" y="896" width="128" height="128"/>
+  <object name="monsterspawn" x="256" y="896" width="128" height="128"/>
+  <object name="finish" x="128" y="896" width="128" height="128"/>
+  <object name="monsterspawn" x="384" y="896" width="128" height="128"/>
+  <object name="monsterspawn" x="640" y="896" width="128" height="128"/>
+  <object name="monsterspawn" x="896" y="896" width="128" height="128"/>
+  <object name="monsterspawn" x="1152" y="896" width="128" height="128"/>
+  <object name="secret" x="640" y="768" width="640" height="128"/>
+ </objectgroup>
+</map>
