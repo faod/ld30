@@ -13,15 +13,17 @@ class Character
 	virtual void tick() = 0;
 	virtual void draw() const = 0;
 
-	virtual void moveLeft() {}
-	virtual void moveRight() {}
-	virtual void jump() {}
-	virtual void stopLeft() {}
-	virtual void stopRight() {}
-	virtual bool damage(int )  { return false;} //true if dmg were lethal therefore should kill (delete) character after
-
-	virtual void on_jump(){}
-	virtual void on_land(){}
+	virtual void moveLeft() = 0;
+	virtual void moveRight() = 0;
+	virtual void jump()  = 0;
+	virtual void stopLeft()  = 0;
+	virtual void stopRight()  = 0;
+	virtual void damage(int )  = 0;
+	virtual bool dead() const  = 0;
+	virtual void kill() = 0;
+	virtual void on_jump() = 0;
+	virtual void on_land() = 0;
+	virtual void attack(Character&) = 0; 
 
 	virtual ~Character() {}
 
