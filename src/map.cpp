@@ -10,6 +10,8 @@
 #include <cassert>
 #include <string>
 
+#define BMP_MS 2048
+
 ALLEGRO_COLOR int_to_al_color(int color) {
 	unsigned char r, g, b;
 	
@@ -26,7 +28,6 @@ void* al_img_loader(const char *path) {
 	
 	if (!(alpath = al_create_path(path))) return NULL;
 	al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP);
-	al_set_new_bitmap_format(ALLEGRO_PIXEL_FORMAT_ANY_WITH_ALPHA);
 	res = al_load_bitmap(al_path_cstr(alpath, ALLEGRO_NATIVE_PATH_SEP));
 	al_set_new_bitmap_flags(0);
 	al_destroy_path(alpath);
@@ -69,22 +70,53 @@ void render_layer(tmx_map *map, tmx_layer *layer) {
 	}
 }
 
+// Splits the map in several video bitmaps
+void Map::split_map(ALLEGRO_BITMAP *map) {
+	unsigned long w_offset, h_offset;
+
+	bmp_x_count = ceil( width/(float)BMP_MS);
+	bmp_y_count = ceil(height/(float)BMP_MS);
+	int bmp_count = bmp_x_count * bmp_y_count;
+
+	bmp = new ALLEGRO_BITMAP*[bmp_count];
+	if (!bmp) throw Failure("Map::split_map(): failed to allocate array of bitmaps!");
+
+	for (int i=0; i<bmp_count; i++) {
+		bmp[i] = al_create_bitmap(BMP_MS, BMP_MS);
+		if (!bmp[i]) throw Failure("Map::split_map(): failed to create bitmap!");
+	}
+
+	for (int i=0; i<bmp_x_count; i++) {
+		for (int j=0; j<bmp_y_count; j++) {
+			w_offset = i*BMP_MS;
+			h_offset = j*BMP_MS;
+
+			al_set_target_bitmap(bmp[j*bmp_x_count+i]);
+			al_clear_to_color(al_map_rgba_f(0., 0., 0., 0.));
+
+			al_draw_bitmap_region(map, w_offset, h_offset, BMP_MS, BMP_MS, 0, 0, 0);
+		}
+	}
+}
+
 void Map::render_map() {
 	ALLEGRO_BITMAP *layer_bmp = NULL;
 	tmx_layer *layers = tmxMap->ly_head;
-	unsigned long w, h;
 	
-	w = tmxMap->width  * tmxMap->tile_width;  // Bitmap's width and height 
-	h = tmxMap->height * tmxMap->tile_height;
-	al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP);
+	width  = tmxMap->width  * tmxMap->tile_width;  // Bitmap's width and height 
+	height = tmxMap->height * tmxMap->tile_height;
+	backgroundcolor = int_to_al_color(tmxMap->backgroundcolor);
+
 	while (layers) {
-		if (layers->visible && layers->type == L_LAYER) {
-			if (!(layer_bmp = al_create_bitmap(w, h))) throw Failure("failed to create bitmap!");
+		if (bmp == NULL && layers->type == L_LAYER && layers->visible) {
+			al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP);
+			if (!(layer_bmp = al_create_bitmap(width, height))) throw Failure("Map::render_map(): failed to create bitmap!");
+			al_set_new_bitmap_flags(0);
 			al_set_target_bitmap(layer_bmp);
 			al_clear_to_color(al_map_rgba_f(0., 0., 0., 0.));
 
 			render_layer(tmxMap, layers);
-			layers->user_data = layer_bmp;
+			split_map(layer_bmp);
 		}
 		else if(layers->type == L_OBJGR)
 		{
@@ -96,102 +128,97 @@ void Map::render_map() {
 	al_set_new_bitmap_flags(0);
 	al_set_target_backbuffer(al_get_current_display());
 }
+
 void Map::processObjects(tmx_object* object)
 {
-			while(object)
+	while(object)
+	{
+		switch(object->shape)
+		{	
+			case S_SQUARE:
 			{
-				switch(object->shape)
-				{	
-					case S_SQUARE:
-					{
-						if(std::string("spawn") == object->name)
-						{
-							playerspawn = object;
-							break;
-						}
-						if(std::string(object->name).find("monsterspawn") != std::string::npos)
-						{
-							monsterspawn.push_back(object);
-							break;
-						}
-						
-						b2BodyDef groundBodyDef;
-						float width = object->width / static_cast<float>(Game::pixelpm);
-						float height = object->height / static_cast<float>(Game::pixelpm);
-
-						groundBodyDef.position.Set(object->x / static_cast<float>(Game::pixelpm) + width / 2.f, object->y / static_cast<float>(Game::pixelpm) + height / 2.f);
-						
-						b2Body* groundBody = wo.CreateBody(&groundBodyDef);
-
-						b2PolygonShape groundBox;
-						b2FixtureDef   groundFixDef;
-						
-
-						groundBox.SetAsBox(width / 2.f, height / 2.f);
-						groundFixDef.shape = &groundBox;
-						
-						if(std::string(object->name).find("block") != std::string::npos)
-						{
-							groundFixDef.filter.categoryBits = WALL;
-							groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
-						}
-						else
-						{
-							groundFixDef.filter.categoryBits = TRIGGER;
-							groundFixDef.filter.maskBits = PLAYER;
-							if(std::string("kill") == object->name)
-								groundFixDef.filter.maskBits = PLAYER | MONSTER;
-							groundFixDef.isSensor = true;
-							groundFixDef.userData = object->name;
-						}
-
-						groundBody->CreateFixture(&groundFixDef);
-
+				if(std::string("spawn") == object->name)
+				{
+					playerspawn = object;
 					break;
-					}
-					case S_POLYGON:
-					{
-						b2BodyDef groundBodyDef;
-						groundBodyDef.position.Set(object->x / Game::pixelpm, object->y / Game::pixelpm);
-
-						b2Body* groundBody = wo.CreateBody(&groundBodyDef);
-
-						b2PolygonShape groundBox;
-						b2FixtureDef groundFixDef;
-
-						b2Vec2 *vec = new b2Vec2[object->points_len];
-						for(int i = 0; i < object->points_len; ++i)
-						{
-							vec[i].x = object->points[i][0] / static_cast<float>(Game::pixelpm);
-							vec[i].y = object->points[i][1] / static_cast<float>(Game::pixelpm);
-						}
-						
-						groundBox.Set(vec, object->points_len);
-						assert(groundBox.Validate());
-						groundFixDef.shape = &groundBox;
-
-						if(std::string(object->name).find("block") != std::string::npos)
-						{
-							groundFixDef.filter.categoryBits = WALL;
-							groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
-						}
-						else
-						{
-							groundFixDef.filter.categoryBits = TRIGGER;
-							groundFixDef.filter.maskBits = PLAYER;
-						}
-						
-						groundBody->CreateFixture(&groundFixDef);
+				}
+				if(std::string(object->name).find("monsterspawn") != std::string::npos)
+				{
+					monsterspawn.push_back(object);
 					break;
-					}
-					default: throw Failure("Square or polygons in tmx to box2d (render_map), im too lazy for the rest");
-					
+				}
+						
+				b2BodyDef groundBodyDef;
+				float width = object->width / static_cast<float>(Game::pixelpm);
+				float height = object->height / static_cast<float>(Game::pixelpm);
 
+				groundBodyDef.position.Set(object->x / static_cast<float>(Game::pixelpm) + width / 2.f, object->y / static_cast<float>(Game::pixelpm) + height / 2.f);
+						
+				b2Body* groundBody = wo.CreateBody(&groundBodyDef);
+
+				b2PolygonShape groundBox;
+				b2FixtureDef   groundFixDef;
+						
+
+				groundBox.SetAsBox(width / 2.f, height / 2.f);
+				groundFixDef.shape = &groundBox;
+						
+				if(std::string(object->name).find("block") != std::string::npos)
+				{
+					groundFixDef.filter.categoryBits = WALL;
+					groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
+				}
+				else
+				{
+					groundFixDef.filter.categoryBits = TRIGGER;
+					groundFixDef.filter.maskBits = PLAYER;
+					groundFixDef.isSensor = true;
+					groundFixDef.userData = object->name;
 				}
 
-				object = object->next;
-			}
+				groundBody->CreateFixture(&groundFixDef);
 
+			break;
+			}
+			case S_POLYGON:
+			{
+				b2BodyDef groundBodyDef;
+				groundBodyDef.position.Set(object->x / Game::pixelpm, object->y / Game::pixelpm);
+
+				b2Body* groundBody = wo.CreateBody(&groundBodyDef);
+
+				b2PolygonShape groundBox;
+				b2FixtureDef groundFixDef;
+
+				b2Vec2 *vec = new b2Vec2[object->points_len];
+				for(int i = 0; i < object->points_len; ++i)
+				{
+					vec[i].x = object->points[i][0] / static_cast<float>(Game::pixelpm);
+					vec[i].y = object->points[i][1] / static_cast<float>(Game::pixelpm);
+				}
+						
+				groundBox.Set(vec, object->points_len);
+				assert(groundBox.Validate());
+				groundFixDef.shape = &groundBox;
+
+				if(std::string(object->name).find("block") != std::string::npos)
+				{
+					groundFixDef.filter.categoryBits = WALL;
+					groundFixDef.filter.maskBits = PLAYER | MONSTER | FOOT;
+				}
+				else
+				{
+					groundFixDef.filter.categoryBits = TRIGGER;
+					groundFixDef.filter.maskBits = PLAYER;
+				}
+						
+				groundBody->CreateFixture(&groundFixDef);
+			break;
+			}
+			default: throw Failure("Square or polygons in tmx to box2d (render_map), im too lazy for the rest");
+		}
+		object = object->next;
+	}
 }
 
 Map::Map(const char *filename, b2World& w) : wo(w), playerspawn(NULL)  {
@@ -202,6 +229,7 @@ Map::Map(const char *filename, b2World& w) : wo(w), playerspawn(NULL)  {
 	if (!tmxMap)
 		throw Failure(tmx_strerr());
 
+	bmp = NULL;
 	render_map();
 }
 
@@ -210,15 +238,31 @@ Map::~Map() {
 }
 
 void Map::draw(int x_offset, int y_offset, int width, int height) {
-	tmx_layer *layers = tmxMap->ly_head;
+	int i, j, start_x, start_y, x_delta, y_delta, x_count, y_count, sx, sy, dx, dy;
+	al_clear_to_color(backgroundcolor);
 
-	al_clear_to_color(int_to_al_color(tmxMap->backgroundcolor));
-	
-	while (layers) {
-		if (layers->visible && layers->type == L_LAYER) {
-			al_draw_bitmap_region((ALLEGRO_BITMAP*)layers->user_data, x_offset, y_offset, width, height, 0, 0, 0);
+	start_x = x_offset/BMP_MS;
+	start_y = y_offset/BMP_MS;
+
+	x_count = std::min<int>((x_offset +  width)/BMP_MS, bmp_x_count-1);
+	y_count = std::min<int>((y_offset + height)/BMP_MS, bmp_y_count-1);
+
+	for (i=start_x; i<=x_count; i++) {
+		for (j=start_y; j<=y_count; j++) {
+			x_delta = x_offset-i*BMP_MS;
+			y_delta = y_offset-j*BMP_MS;
+
+			sx = (i==start_x) ? x_delta: 0;
+			sy = (j==start_y) ? y_delta: 0;
+
+			dx = (i==start_x) ? 0: i*BMP_MS-x_offset;
+			dy = (j==start_y) ? 0: j*BMP_MS-y_offset;
+
+			al_draw_bitmap_region(bmp[j*bmp_x_count+i],
+				                  sx,     sy, 
+								  BMP_MS, BMP_MS,
+								  dx,     dy,           0);
 		}
-		layers = layers->next;
 	}
 }
 

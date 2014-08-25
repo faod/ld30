@@ -21,7 +21,14 @@ class Monster : public Character
 	virtual void jump();
 	bool goingRight();
 
-	virtual bool damage(int);
+	virtual void damage(int);
+	virtual void stopLeft();
+	virtual void stopRight();
+	virtual void kill();
+	virtual bool dead() const;
+	virtual void on_jump();
+	virtual void on_land();
+	virtual void attack(Character&);
 	virtual ~Monster();
 
 	private:
@@ -43,7 +50,10 @@ class Monster : public Character
 	b2Fixture* swordFix;
 
 	
+	//states
 	bool right;
+	bool resting;
+	bool attacking;
 
 	int life;
 };

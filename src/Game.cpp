@@ -100,6 +100,7 @@ void Game::input(ALLEGRO_THREAD* )
 					case ALLEGRO_KEY_LEFT: { this->player->moveLeft(); break;}
 					case ALLEGRO_KEY_RIGHT: { this->player->moveRight(); break; }
 					case ALLEGRO_KEY_UP: { this->player->jump(); break; }
+					case ALLEGRO_KEY_SPACE: characters[1]->kill();
 					default : break;
 				}
 			}
