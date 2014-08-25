@@ -110,7 +110,7 @@ void Monster::tick()
 				{
 					resting = true;
 					attacking = true;
-					attackcooldown = 2 * (1 / g.m.animation_tick);
+					attackcooldown = 50;
 					spAnimationState_setAnimationByName(model->state, 0, "slash",  false);
 				}
 				
@@ -128,7 +128,7 @@ void Monster::tick()
 			{
 					resting = true;
 					attacking = true;
-					attackcooldown = 2 * (1 / g.m.animation_tick);
+					attackcooldown = 50;
 					spAnimationState_setAnimationByName(model->state, 0, "slash",  false);
 			}
 					
@@ -159,9 +159,9 @@ void Monster::tick()
 			return;
 		}
 	
-		if(attackcooldown == (2 * (1 / static_cast<float>(g.m.animation_tick))))
+		if(attackcooldown == 50)
 		{
-			dynamicBox.SetAsBox(0.4, 0.25, b2Vec2(-0.65, -0.2), 0);
+			dynamicBox.SetAsBox(0.4, 0.25, b2Vec2(right ? 0.65 : -0.65, -0.2), 0);
 			swordDef.shape = &dynamicBox;
 			swordFix = body->CreateFixture(&swordDef);
 			swordFix->SetUserData(this);
@@ -207,12 +207,6 @@ void Monster::moveLeft()
 	//animation left
 	model->skeleton->flipX = 1;
 
-	//sword hitbox left
-	body->DestroyFixture(swordFix);
-	dynamicBox.SetAsBox(0.4, 0.25, b2Vec2(-0.65, -0.2), 0);
-	swordDef.shape = &dynamicBox;
-	swordFix = body->CreateFixture(&swordDef);
-	swordFix->SetUserData(this);
 }
 
 void Monster::moveRight()
@@ -221,12 +215,6 @@ void Monster::moveRight()
 	//animation right
 	model->skeleton->flipX = 0;
 
-	//sword hitbox right
-	body->DestroyFixture(swordFix);
-	dynamicBox.SetAsBox(0.4, 0.25, b2Vec2(0.65, -0.2), 0);
-	swordDef.shape = &dynamicBox;
-	swordFix = body->CreateFixture(&swordDef);
-	swordFix->SetUserData(this);
 }
 
 void Monster::jump()
