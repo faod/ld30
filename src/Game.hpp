@@ -41,6 +41,8 @@ class Game
 	static void *startRefresh(void *arg);
 
 	
+	void finish();
+
 	//RETURNS COORD IN PIXEL
 	b2Vec2 getScreenCorner() const;
 

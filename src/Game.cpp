@@ -56,7 +56,29 @@ void Game::anim(ALLEGRO_THREAD* )
 		w.Step(1./m.animation_tick, 6, 2);
 		
 		for(std::vector<Character*>::iterator it = characters.begin(), end = characters.end(); it != end; ++it)
+		{
 			(*it)->tick();
+		}
+
+		for(std::vector<Character*>::iterator it = characters.begin(), end = characters.end(); it != end; ++it)
+		{	
+			if((*it)->dead())
+			{
+				if(*it != player)
+				{
+					std::cout << "characters.size " << characters.size() << std::endl;
+					delete (*it);
+					*it = NULL;
+					characters.erase(it);
+					it = characters.begin();
+					std::cout << "characters.size " << characters.size() << std::endl;
+				}
+				else
+				{
+					//TODO when we die
+				}
+			}
+		}
 	}
 }
 
@@ -201,6 +223,10 @@ void Game::refresh()
 	}
 }
 
+void Game::finish()
+{
+	//TODO
+}
 
 b2Vec2 Game::getScreenCorner() const
 {
