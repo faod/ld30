@@ -173,7 +173,7 @@ void Map::processObjects(tmx_object* object)
 					groundFixDef.filter.categoryBits = TRIGGER;
 					groundFixDef.filter.maskBits = PLAYER;
 					if(std::string("kill") == object->name)
-						groundFixDef.filter = PLAYER | MONSTER;
+						groundFixDef.filter.maskBits = PLAYER | MONSTER;
 					groundFixDef.isSensor = true;
 					groundFixDef.userData = object->name;
 				}
