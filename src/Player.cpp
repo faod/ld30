@@ -166,11 +166,14 @@ void Player::draw() const
 void Player::moveLeft()
 {
 		left = true;
+		if(!right)
+			model->skeleton->flipX = 1;
 }
 
 void Player::moveRight()
 {	
 		right = true;
+		model->skeleton->flipX = 0;
 }
 
 void Player::jump()
