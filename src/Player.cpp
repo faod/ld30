@@ -24,7 +24,7 @@ Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64)), 
 	fixtureDef.friction = 0.0f;
 	
 	fixtureDef.filter.categoryBits = PLAYER;
-	fixtureDef.filter.maskBits = MONSTER | TRIGGER | WALL;
+	fixtureDef.filter.maskBits = MONSTER | TRIGGER | WALL | SWORD;
 
 	(body->CreateFixture(&fixtureDef))->SetUserData(this);
 
@@ -103,7 +103,7 @@ void Player::draw() const
 					  4);
 	al_draw_filled_rectangle(al_get_display_width(g.m.display) / 2 - 100,
 							 al_get_display_height(g.m.display) - 60,
-							 al_get_display_width(g.m.display) / 2 - 100 + life * 2,
+							 al_get_display_width(g.m.display) / 2 - 100 + ((life >= 0) ? life * 2 : 0),
 							 al_get_display_height(g.m.display) - 40,
 							 al_map_rgb(255, 0, 0));
 
@@ -149,15 +149,11 @@ b2Vec2 Player::getCenter() const
 	return body->GetWorldCenter();
 }
 
-bool Player::damage(int qt)
+void Player::damage(int qt)
 {
 	life -= qt;
 	if(life > 100)
 		life = 100;
-	if (life <= 0)
-		return true;
-	
-	return false;
 }
 void Player::on_jump()
 {
@@ -178,4 +174,24 @@ void Player::onMonsterSeparation()
 {
 	contact = false;
 	on_jump();
+}
+
+void Player::finish()
+{
+	g.finish();
+}
+
+void Player::kill()
+{
+	life = 0;
+}
+
+bool Player::dead() const
+{
+	return life <= 0;
+}
+
+void Player::attack(Character& c)
+{
+	c.damage(60);
 }

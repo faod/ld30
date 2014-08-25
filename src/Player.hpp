@@ -22,12 +22,17 @@ class Player: public Character
 	virtual void jump();
 	virtual void stopLeft();
 	virtual void stopRight();
-	virtual bool damage(int qt);
+	virtual void damage(int qt);
 	virtual void on_jump();
 	virtual void on_land();
+	virtual void kill();
+	virtual bool dead() const;
+	virtual void attack(Character& c);
 
 	void onMonsterContact();
 	void onMonsterSeparation();
+
+	void finish();	
 
 	b2Vec2 getCenter() const; 
 
