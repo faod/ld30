@@ -1,0 +1,132 @@
+
+hero.png
+size: 499,62
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cowter_back
+  rotate: true
+  xy: 478, 42
+  size: 20, 21
+  orig: 20, 21
+  offset: 0, 0
+  index: -1
+cowter_front
+  rotate: false
+  xy: 113, 2
+  size: 21, 21
+  orig: 22, 21
+  offset: 1, 0
+  index: -1
+cuirass
+  rotate: true
+  xy: 119, 29
+  size: 33, 64
+  orig: 33, 64
+  offset: 0, 0
+  index: -1
+cuisse_back
+  rotate: true
+  xy: 185, 38
+  size: 24, 63
+  orig: 24, 63
+  offset: 0, 0
+  index: -1
+cuisse_front
+  rotate: true
+  xy: 2, 2
+  size: 25, 64
+  orig: 25, 64
+  offset: 0, 0
+  index: -1
+faulds
+  rotate: true
+  xy: 332, 5
+  size: 36, 29
+  orig: 36, 29
+  offset: 0, 0
+  index: -1
+gauntlet_back
+  rotate: true
+  xy: 306, 43
+  size: 19, 58
+  orig: 19, 58
+  offset: 0, 0
+  index: -1
+gauntlet_front
+  rotate: true
+  xy: 250, 38
+  size: 24, 54
+  orig: 24, 54
+  offset: 0, 0
+  index: -1
+greave_back
+  rotate: true
+  xy: 423, 44
+  size: 18, 53
+  orig: 18, 53
+  offset: 0, 0
+  index: -1
+greave_front
+  rotate: true
+  xy: 366, 42
+  size: 20, 55
+  orig: 20, 55
+  offset: 0, 0
+  index: -1
+helmet
+  rotate: true
+  xy: 363, 7
+  size: 33, 36
+  orig: 33, 36
+  offset: 0, 0
+  index: -1
+pauldron_back
+  rotate: true
+  xy: 68, 11
+  size: 23, 43
+  orig: 23, 43
+  offset: 0, 0
+  index: -1
+pauldron_front
+  rotate: false
+  xy: 306, 2
+  size: 24, 39
+  orig: 24, 39
+  offset: 0, 0
+  index: -1
+poleyn_back
+  rotate: false
+  xy: 227, 24
+  size: 19, 12
+  orig: 20, 12
+  offset: 1, 0
+  index: -1
+poleyn_front
+  rotate: true
+  xy: 136, 2
+  size: 21, 14
+  orig: 21, 14
+  offset: 0, 0
+  index: -1
+sabaton_back
+  rotate: true
+  xy: 401, 2
+  size: 38, 9
+  orig: 38, 9
+  offset: 0, 0
+  index: -1
+sabaton_front
+  rotate: false
+  xy: 185, 25
+  size: 40, 11
+  orig: 41, 11
+  offset: 1, 0
+  index: -1
+sword
+  rotate: false
+  xy: 2, 36
+  size: 115, 26
+  orig: 115, 26
+  offset: 0, 0
+  index: -1
