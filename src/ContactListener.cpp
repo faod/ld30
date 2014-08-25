@@ -3,6 +3,48 @@
 #include "Game.hpp"
 #include "failure.hpp"
 
+
+static void onFootWall(b2Fixture* foot, b2Fixture* /*wall*/)
+{
+	static_cast<Character*>(foot->GetUserData())->on_land();
+}
+static void outFootWall(b2Fixture* foot, b2Fixture* /*wall*/)
+{
+	static_cast<Character*>(foot->GetUserData())->on_jump();
+}
+
+static void onFootMonster(b2Fixture* foot, b2Fixture* /*monster*/)
+{
+	static_cast<Player*>(foot->GetUserData())->onMonsterContact();
+}
+static void outFootMonster(b2Fixture* foot, b2Fixture* /*monster*/)
+{
+	static_cast<Player*>(foot->GetUserData())->onMonsterSeparation();
+}
+static void onPlayerTrigger(b2Fixture* player, b2Fixture *trigger)
+{
+	const char* str = static_cast<char*>(trigger->GetUserData());
+
+	if(std::string("kill") == str) //kill trigger
+	{
+		static_cast<Character*>(player->GetUserData())->kill();
+	}
+	else if(std::string("secret") == str) //heal player
+	{
+		static_cast<Character*>(player->GetUserData())->damage(-100);
+	}	
+	else if(std::string("finish") == str) 
+	{
+		static_cast<Player*>(player->GetUserData())->finish();
+	}
+}
+static void onSwordHit(b2Fixture* sword, b2Fixture *character)
+{
+	Character* att = static_cast<Character*>(sword->GetUserData());
+	Character* def = static_cast<Character*>(character->GetUserData());
+	att->attack(*def);
+}
+
 void ContactListener::BeginContact(b2Contact *contact)
 {
 	b2Fixture* fixA = contact->GetFixtureA();
@@ -13,30 +55,36 @@ void ContactListener::BeginContact(b2Contact *contact)
 	{
 		case PLAYER:
 			if(fixB->GetFilterData().categoryBits == TRIGGER)
-			{
-				
-			}
-			else if(fixB->GetFilterData().categoryBits == MONSTER)
-			{
-				
-			}	
+				onPlayerTrigger(fixA, fixB);
+			else if(fixB->GetFilterData().categoryBits == SWORD)
+				onSwordHit(fixB, fixA);
 		break;
 		case FOOT:
 			if(fixB->GetFilterData().categoryBits == WALL)
-				static_cast<Character*>(fixA->GetUserData())->on_land(); // Foot -> wall
+				onFootWall(fixA, fixB);
 			else if(fixB->GetFilterData().categoryBits == MONSTER)
-				static_cast<Player*>(fixA->GetUserData())->onMonsterContact();//foot->monster
+				onFootMonster(fixA, fixB);
 		break;
 		case WALL:
 			if(fixB->GetFilterData().categoryBits == FOOT)
-				static_cast<Character*>(fixB->GetUserData())->on_land(); //wall->foot
+				onFootWall(fixB, fixA);	
 		break;
 		case TRIGGER:
-
+			if(fixB->GetFilterData().categoryBits == PLAYER)
+				onPlayerTrigger(fixB, fixA);
+			else if(fixB->GetFilterData().categoryBits == MONSTER)
+				onPlayerTrigger(fixB, fixA);
 		break;
 		case MONSTER:
 			if(fixB->GetFilterData().categoryBits == FOOT)
-				static_cast<Player*>(fixB->GetUserData())->onMonsterContact(); //monster->foot
+				onFootMonster(fixB, fixA);
+			else if(fixB->GetFilterData().categoryBits == SWORD)
+				onSwordHit(fixB, fixA);
+			else if(fixB->GetFilterData().categoryBits == TRIGGER)
+				onPlayerTrigger(fixA, fixB);
+		break;
+		case SWORD:
+			onSwordHit(fixA, fixB);
 		break;
 		default:
 			break;
@@ -54,17 +102,17 @@ void ContactListener::EndContact(b2Contact *contact)
 	{
 		case FOOT:
 			if(fixB->GetFilterData().categoryBits == WALL)
-				static_cast<Character*>(fixA->GetUserData())->on_jump(); //foot -> wall
+				outFootWall(fixA, fixB);
 			else if(fixB->GetFilterData().categoryBits == MONSTER)
-				static_cast<Player*>(fixA->GetUserData())->onMonsterSeparation(); //foot -> monster
+				outFootMonster(fixA, fixB);
 		break;
 		case WALL:
 			if(fixB->GetFilterData().categoryBits == FOOT)
-				static_cast<Character*>(fixB->GetUserData())->on_jump(); //wall -> foot
+				outFootWall(fixB, fixA);
 		break;
 		case MONSTER:
 			if(fixB->GetFilterData().categoryBits == FOOT)
-				static_cast<Player*>(fixB->GetUserData())->onMonsterSeparation(); //monster->foot
+				outFootMonster(fixB, fixA);
 		break;
 		default:
 			break;
