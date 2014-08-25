@@ -12,10 +12,18 @@ class Monster;
 
 class Map {
 	tmx_map *tmxMap;
+	unsigned long width, height;
+	ALLEGRO_COLOR backgroundcolor;
+
 	b2World &wo;
 
 	tmx_object *playerspawn;
 	std::vector<tmx_object*> monsterspawn;
+
+	// Split the map into several video bitmaps
+	ALLEGRO_BITMAP **bmp;
+	int bmp_x_count, bmp_y_count;
+	void split_map(ALLEGRO_BITMAP *map);
 
 	void render_map();
 public:

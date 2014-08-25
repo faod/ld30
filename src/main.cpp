@@ -67,6 +67,9 @@ Main::Main(int screen_w, int screen_h): loop(true) {
 	al_register_event_source(refreshEQ, al_get_timer_event_source(refreshTimer));
 	// ALLEGRO_EVENT_TIMER animation update
 	al_register_event_source(animationEQ, al_get_timer_event_source(animationTimer));
+
+	// Always create bitmaps with an alpha channel
+	al_set_new_bitmap_format(ALLEGRO_PIXEL_FORMAT_ANY_WITH_ALPHA);
 }
 
 // Deinitialize Allegro and its addons
