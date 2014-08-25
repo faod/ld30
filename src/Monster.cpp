@@ -26,15 +26,11 @@ Monster::Monster(Game& g, b2Vec2 p) : Character(g), swordFix(NULL),right(true), 
 	(body->CreateFixture(&fixtureDef))->SetUserData(this);
 
 	//sword to kill player
-	dynamicBox.SetAsBox(0.4, 0.25, b2Vec2(0.65, -0.2), 0);
-	swordDef.shape = &dynamicBox;
 	swordDef.isSensor = true;
 	swordDef.density = 0.1;
 	swordDef.filter.categoryBits = SWORD;
 	swordDef.filter.maskBits = PLAYER;
 	
-	swordFix = body->CreateFixture(&swordDef);
-	swordFix->SetUserData(this);
 
 	// Loads the Spine model
 	ALLEGRO_PATH *path, *resourceDir, *file;
@@ -91,17 +87,87 @@ void Monster::tick()
 	//skeleton logic
 	if(!attacking)
 	{
+		b2Vec2 dist;
+		dist = (g.getPlayerCenter() - body->GetWorldCenter());
+
+		//The where do I look part (only when not attacking. when attacking the zombie is freezed during cd)
+		if(dist.x < 0)
+			moveLeft();
+		else
+			moveRight();
+	
+
+		if(resting)
+		{
+			if(dist.x > -10 && dist.x < 10)   //if in 10m range, start moving toward
+			{
+				if(dist.x < -1. || dist.x > 1.) //if more than 1m walk
+				{
+					resting = false;
+					spAnimationState_setAnimationByName(model->state, 0, "walk",  true);
+				}
+				else							//if closer than 1m attack
+				{
+					resting = true;
+					attacking = true;
+					attackcooldown = 2 * (1 / g.m.animation_tick);
+					spAnimationState_setAnimationByName(model->state, 0, "slash",  false);
+				}
+				
+			}
+		}
+		else //!resting (walking)
+		{	 
+			
+			if(dist.x < -10. || dist.x > 10.) //if more than 10m rest
+			{
+					resting = true;
+					spAnimationState_setAnimationByName(model->state, 0, "rest",  true);
+			}
+			else if(dist.x > -1. && dist.x < 1.) //else if less than 1m attack
+			{
+					resting = true;
+					attacking = true;
+					attackcooldown = 2 * (1 / g.m.animation_tick);
+					spAnimationState_setAnimationByName(model->state, 0, "slash",  false);
+			}
+					
+
+		} //end if (resting/walking)
+
+
+		//now that decisions were taken, lets move
+		//If not resting, move
 		if(!resting)
 		{
-			body->ApplyLinearImpulse(b2Vec2( right ? 10. : -10., 0.),  body->GetWorldCenter(), true);
+			float needvel = right? 4. : -4.;
+			float velchange = needvel - body->GetLinearVelocity().x;
+			float force = body->GetMass() * velchange / (1 /static_cast<float>(g.m.animation_tick));
+			body->ApplyForce(b2Vec2(force, 0),  body->GetWorldCenter(), true);
 		}
 
 
 	}
 	else				//attacking
-	{				
-		
-
+	{
+		if(attackcooldown == 0)
+		{
+			if(swordFix)
+				body->DestroyFixture(swordFix);
+			spAnimationState_setAnimationByName(model->state, 0,((resting) ? "rest" : "walk"),  true);
+			attacking = false;
+			return;
+		}
+	
+		if(attackcooldown == (2 * (1 / static_cast<float>(g.m.animation_tick))))
+		{
+			dynamicBox.SetAsBox(0.4, 0.25, b2Vec2(-0.65, -0.2), 0);
+			swordDef.shape = &dynamicBox;
+			swordFix = body->CreateFixture(&swordDef);
+			swordFix->SetUserData(this);
+		}
+		attackcooldown--;
+				
 	}
 	
 }
@@ -140,7 +206,6 @@ void Monster::moveLeft()
 	right = false;
 	//animation left
 	model->skeleton->flipX = 1;
-	std::cout << "Monster moved on the left" << std::endl;
 
 	//sword hitbox left
 	body->DestroyFixture(swordFix);
@@ -155,7 +220,6 @@ void Monster::moveRight()
 	right = true;
 	//animation right
 	model->skeleton->flipX = 0;
-	std::cout << "Monster moved on the right" << std::endl;
 
 	//sword hitbox right
 	body->DestroyFixture(swordFix);

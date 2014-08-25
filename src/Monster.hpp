@@ -54,7 +54,7 @@ class Monster : public Character
 	bool right;
 	bool resting;
 	bool attacking;
-
+	int attackcooldown;
 	int life;
 };
 
