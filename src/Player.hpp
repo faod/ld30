@@ -6,7 +6,7 @@
 
 #include <allegro5/allegro.h>
 #include <Box2D/Box2D.h>
-
+#include <spine/spine-allegro.h>
 
 class Player: public Character
 {
@@ -45,6 +45,13 @@ class Player: public Character
 	b2FixtureDef swordDef;
 	
 	b2PolygonShape dynamicBox;
+
+	// Spine
+	static SkeletonDrawable *model;
+	static spSkeletonData   *modelData;
+	static spAtlas *modelAtlas;
+	static spSkeletonJson *jsonSkel;
+	static spAnimationStateData *stateData;
 
 	bool left;
 	bool right;
