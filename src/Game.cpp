@@ -91,12 +91,12 @@ void Game::input(ALLEGRO_THREAD* )
  
  		while(al_wait_for_event(m.inputEQ, &ev), m.loop)
 		{
-			if(!player) continue;
 			if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
  			{
 				m.loop = false;
 				break;
 			}
+			else if(!player) continue;
 			else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
 			{
 				switch (ev.keyboard.keycode)
