@@ -96,6 +96,8 @@ void Game::anim(ALLEGRO_THREAD* )
 		{
 			characters.erase(del, characters.end());
 		}
+
+		refresh();
 	}
 }
 void Game::input(ALLEGRO_THREAD* )
@@ -135,25 +137,28 @@ void Game::input(ALLEGRO_THREAD* )
 
 void Game::refresh()
 {
-	ALLEGRO_EVENT ev;
+	//ALLEGRO_EVENT ev;
+	b2Vec2 pos;
 
-	al_start_timer(m.refreshTimer);
+	//al_start_timer(m.refreshTimer);
 
- 	while (m.loop)
+ 	/*while (m.loop)
 	{
-		al_wait_for_event(m.refreshEQ, &ev);
+		al_wait_for_event(m.refreshEQ, &ev);*/
 
 		if(player)
 		{
-			b2Vec2 pos = getScreenCorner();
-			map.draw(pos.x, pos.y, m.screen_w, m.screen_h);
-		
+			pos = player->getCenter();
+			screenCorner.Set(pos.x * pixelpm - m.screen_w / 2, pos.y * pixelpm - m.screen_h /2);
+		}
 
-		for(std::vector<Character*>::const_reverse_iterator it = characters.rbegin(), end = characters.rend() ; it != end; ++it)
+		pos = getScreenCorner();
+		map.draw(pos.x, pos.y, m.screen_w, m.screen_h);
+
+		for(std::vector<Character*>::reverse_iterator it = characters.rbegin(), end = characters.rend() ; it != end; ++it)
 		{
 			if(*it)
 				(*it)->draw();
-		}
 		}
 
 		if(debug && player)
@@ -239,7 +244,7 @@ void Game::refresh()
 		}
 			
 		al_flip_display();
-	}
+	//}
 }
 
 void Game::finish()

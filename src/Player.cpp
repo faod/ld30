@@ -88,7 +88,7 @@ void Player::tick()
 
 void Player::draw() const
 {
-	al_draw_filled_rectangle(g.m.screen_w/2 - 16, g.m.screen_h/2 - 32, g.m.screen_w/2 + 16, g.m.screen_h/2 + 32, al_map_rgb(255, 0, 0));
+	//al_draw_filled_rectangle(g.m.screen_w/2 - 16, g.m.screen_h/2 - 32, g.m.screen_w/2 + 16, g.m.screen_h/2 + 32, al_map_rgb(255, 0, 0));
 	
 	//hp bar
 	al_draw_rectangle(al_get_display_width(g.m.display) / 2 - 102,
