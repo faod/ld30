@@ -4,13 +4,8 @@
 #include <string>
 #include <cstdlib>
 
-Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64)), left(false), right(false), landed(true), contact(false), lastproc(0), life(100)
+Player::Player(Game& g, b2Vec2 p) : Character(g), left(false), right(false), landed(true), contact(false), lastproc(0), life(100)
 {
-	al_set_target_bitmap(bm);
-	al_clear_to_color(al_map_rgb(255, 0, 0));
-	al_set_target_bitmap(al_get_backbuffer(this->g.m.display));
-
-
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(p.x, p.y);
 	bodyDef.fixedRotation = true;
@@ -48,7 +43,6 @@ Player::Player(Game& g, b2Vec2 p) : Character(g), bm(al_create_bitmap(32, 64)), 
 
 Player::~Player()
 {
-	al_destroy_bitmap(bm);
 	g.w.DestroyBody(body);
 	body = NULL;
 }
@@ -94,7 +88,7 @@ void Player::tick()
 
 void Player::draw() const
 {
-	al_draw_bitmap(bm, al_get_display_width(g.m.display)/2 -al_get_bitmap_width(bm) / 2 , al_get_display_height(g.m.display)/2 - al_get_bitmap_height(bm)/2 , 0);
+	al_draw_filled_rectangle(g.m.screen_w/2 - 16, g.m.screen_h/2 - 32, g.m.screen_w/2 + 16, g.m.screen_h/2 + 32, al_map_rgb(255, 0, 0));
 	
 	//hp bar
 	al_draw_rectangle(al_get_display_width(g.m.display) / 2 - 102,

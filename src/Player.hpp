@@ -39,9 +39,6 @@ class Player: public Character
 	virtual ~Player();
 
 	private:
-	ALLEGRO_BITMAP* bm;
-
-
 	b2BodyDef	bodyDef;
 	b2Body*		body;
 	b2FixtureDef fixtureDef;
