@@ -116,9 +116,10 @@ void Game::input(ALLEGRO_THREAD* )
 			{
 				switch (ev.keyboard.keycode)
 				{
-					case ALLEGRO_KEY_LEFT: { this->player->moveLeft(); break;}
-					case ALLEGRO_KEY_RIGHT: { this->player->moveRight(); break; }
-					case ALLEGRO_KEY_UP: { this->player->jump(); break; }
+					case ALLEGRO_KEY_LEFT: { this->player->moveLeft(); 		break; }
+					case ALLEGRO_KEY_RIGHT: { this->player->moveRight(); 	break; }
+					case ALLEGRO_KEY_UP: { this->player->jump(); 			break; }
+					case ALLEGRO_KEY_RCTRL: { this->player->onAttack(); 	break; }
 					default : break;
 				}
 			}
