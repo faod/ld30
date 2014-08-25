@@ -24,7 +24,7 @@ Player::Player(Game& g, b2Vec2 p) : Character(g), left(false), right(false), lan
 	(body->CreateFixture(&fixtureDef))->SetUserData(this);
 
 	//add "feet" to detect floor
-	dynamicBox.SetAsBox(0.1, 0.1, b2Vec2(0, 0.9f), 0);
+	dynamicBox.SetAsBox(0.2, 0.05, b2Vec2(0, 0.9f), 0);
 	fixtureDef.isSensor = true;
 	fixtureDef.density = 0.1;
 	fixtureDef.filter.categoryBits = FOOT;
