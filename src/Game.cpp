@@ -73,10 +73,13 @@ void Game::anim(ALLEGRO_THREAD* )
 		al_wait_for_event(m.animationEQ, &ev);
 		
 		w.Step(1./m.animation_tick, 6, 2);
-		
-		for(std::vector<Character*>::iterator it = characters.begin(), end = characters.end(); it != end; ++it)
+	
+		if(player)
 		{
-			(*it)->tick();
+			for(std::vector<Character*>::iterator it = characters.begin(), end = characters.end(); it != end; ++it)
+			{
+				(*it)->tick();
+			}
 		}
 
 		IsDead d;
